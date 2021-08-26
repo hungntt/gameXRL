@@ -14,9 +14,12 @@ DB_TABLES = {'games': (
 ), 'states': (
     "CREATE TABLE `states` ("
     " `state_id` int(11) NOT NULL AUTO_INCREMENT,"
+    " `game_id` int(11) NOT NULL,"
     " `state` varchar(150) NOT NULL,"
+    " `state_code` varchar(150) NOT NULL,"
     " `created_at` date NOT NULL,"
-    " PRIMARY KEY (`state_id`)"
+    " PRIMARY KEY (`state_id`), KEY `game_id` (`game_id`),"
+    " CONSTRAINT `states_idfk1` FOREIGN KEY (`game_id`) REFERENCES `games` (`game_id`) ON DELETE CASCADE"
     ") ENGINE=InnoDB"
 ), 'actions': (
     "CREATE TABLE `actions` ("
@@ -37,6 +40,15 @@ DB_TABLES = {'games': (
     " PRIMARY KEY (`comment_id`), KEY `state_id` (`state_id`), KEY `action_id` (`action_id`),"
     " CONSTRAINT `comments_idfk1` FOREIGN KEY (`state_id`) REFERENCES `states` (`state_id`) ON DELETE CASCADE,"
     " CONSTRAINT `comments_idfk2` FOREIGN KEY (`action_id`) REFERENCES `actions` (`action_id`) ON DELETE CASCADE"
+    ") ENGINE=InnoDB"
+), 'comment_batches': (
+    "CREATE TABLE `comment_batches` ("
+    " `comment_batches_id` int(11) NOT NULL AUTO_INCREMENT,"
+    " `start_state_id` int(11) NOT NULL,"
+    " `end_state_id` int(11) NOT NULL,"
+    " `comment` varchar(1000) NOT NULL,"
+    " `created_at` timestamp NOT NULL,"
+    " PRIMARY KEY (`comment_batches_id`)"
     ") ENGINE=InnoDB"
 )}
 
