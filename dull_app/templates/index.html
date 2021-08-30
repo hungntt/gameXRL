@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>GameXRL</title>
+    <style>
+        html, body, #wrapper {height:80%;width: 100%;margin: 0;padding: 0;border: 0;}
+        #wrapper td {vertical-align: middle; text-align: center;}
+        #cmt {height:120px; width:200px;}
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway&display=swap" rel="stylesheet">
+  </head>
+
+  <body>
+     <h1><b>Test Render</b></h1>
+    <table id="wrapper">
+        <tr>
+            <td><img src="{{ url_for('render_feed') }}"></td>
+        </tr>
+        <tr>
+            <form>
+            <label for="cmt">Comment:</label>
+             <br>
+            <textarea type="text" id="cmt" rows="4" cols="50" spellcheck="true"></textarea>
+            <br><br>
+            <input type="submit" value="Submit">
+            </form>
+        </tr>
+    </table>
+
+  </body>
+</html>
