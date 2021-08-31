@@ -2,6 +2,7 @@ from __future__ import print_function
 
 import mysql.connector as sql
 from mysql.connector import errorcode
+from sshtunnel import SSHTunnelForwarder
 
 DB_NAME = 'xrl'
 DB_TABLES = {'games': (
@@ -30,6 +31,15 @@ DB_TABLES = {'games': (
     " PRIMARY KEY (`action_id`), KEY `state_id` (`state_id`),"
     " CONSTRAINT `actions_idfk1` FOREIGN KEY (`state_id`) REFERENCES `states` (`state_id`) ON DELETE CASCADE"
     ") ENGINE=InnoDB"
+), 'comment_batches': (
+    "CREATE TABLE `comment_batches` ("
+    " `comment_batches_id` int(11) NOT NULL AUTO_INCREMENT,"
+    " `start_state_id` int(11) NOT NULL,"
+    " `end_state_id` int(11) NOT NULL,"
+    " `comment` varchar(1000) NOT NULL,"
+    " `created_at` timestamp NOT NULL,"
+    " PRIMARY KEY (`comment_batches_id`)"
+    ") ENGINE=InnoDB"
 ), 'comments': (
     "CREATE TABLE `comments` ("
     " `comment_id` int(11) NOT NULL AUTO_INCREMENT,"
@@ -43,15 +53,6 @@ DB_TABLES = {'games': (
     " CONSTRAINT `comments_idfk2` FOREIGN KEY (`action_id`) REFERENCES `actions` (`action_id`) ON DELETE CASCADE,"
     " CONSTRAINT `comments_idfk3` FOREIGN KEY (`comment_batches_id`) "
     " REFERENCES `comment_batches` (`comment_batches_id`) ON DELETE CASCADE"
-    ") ENGINE=InnoDB"
-), 'comment_batches': (
-    "CREATE TABLE `comment_batches` ("
-    " `comment_batches_id` int(11) NOT NULL AUTO_INCREMENT,"
-    " `start_state_id` int(11) NOT NULL,"
-    " `end_state_id` int(11) NOT NULL,"
-    " `comment` varchar(1000) NOT NULL,"
-    " `created_at` timestamp NOT NULL,"
-    " PRIMARY KEY (`comment_batches_id`)"
     ") ENGINE=InnoDB"
 )}
 
@@ -92,10 +93,18 @@ def create_tables(cursor):
 
 
 def main():
+    server = SSHTunnelForwarder(
+            ('58.186.80.21', 2056),  # If port 2056 timed out, replace with port 22
+            ssh_username="administrator",
+            ssh_password="Khang112@",
+            remote_bind_address=('0.0.0.0', 1402),
+    )
+    server.start()
     cnx = sql.connect(
             host="localhost",
             user="root",
             password="password",
+            port=server.local_bind_port,
     )
     cursor = cnx.cursor()
 
@@ -104,6 +113,7 @@ def main():
 
     cursor.close()
     cnx.close()
+    server.stop()
 
 
 if __name__ == '__main__':
