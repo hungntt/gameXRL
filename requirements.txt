@@ -1,2 +1,6 @@
-python==3.7
+# python==3.7
 mysql-connector-python
+sshtunnel
+flask
+gym
+opencv-python
