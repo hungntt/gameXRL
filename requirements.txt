@@ -1,5 +1,9 @@
 python==3.7
 mysql-connector-python
+sshtunnel
+flask
+gym
+opencv-python
 Flask==1.1.2
 flask_restplus==0.13.0
 Flask_Script==2.0.6
