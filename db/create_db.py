@@ -4,6 +4,8 @@ import mysql.connector as sql
 from mysql.connector import errorcode
 from sshtunnel import SSHTunnelForwarder
 
+from db.connect_db import connect_db
+
 DB_NAME = 'xrl'
 DB_TABLES = {'games': (
     "CREATE TABLE `games` ("
@@ -93,19 +95,7 @@ def create_tables(cursor):
 
 
 def main():
-    server = SSHTunnelForwarder(
-            ('58.186.80.21', 2056),  # If port 2056 timed out, replace with port 22
-            ssh_username="administrator",
-            ssh_password="Khang112@",
-            remote_bind_address=('0.0.0.0', 1402),
-    )
-    server.start()
-    cnx = sql.connect(
-            host="localhost",
-            user="root",
-            password="password",
-            port=server.local_bind_port,
-    )
+    server, cnx = connect_db()
     cursor = cnx.cursor()
 
     create_database(cursor, cnx)
