@@ -1,6 +1,12 @@
+import base64
+import io
+
 import cv2
 import gym
 from flask import render_template, request, flash, redirect, Response
+from matplotlib import pyplot as plt
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+
 from app import app
 from app.routes.forms import GameForm, CommentForm
 from db.api import create_game, create_comment
@@ -11,7 +17,7 @@ def index():
     """
     Render index page and Add new comment
     """
-
+    image = plot_png()
     form = CommentForm(request.form)
     if request.method == 'POST':
         # Save the comment to database
@@ -19,7 +25,7 @@ def index():
         flash('New comment created successfully.')
         return redirect('/')
 
-    return render_template('index.html', form=form)
+    return render_template('index.html', form=form, image=image)
 
 
 # @app.route('/games', methods=['POST'])
@@ -37,48 +43,35 @@ def index():
 #
 #     return render_template('new_game.html', form=form)
 
-def frame_gen(env_func, *args, **kwargs):
-    get_frame = env_func(*args, **kwargs)
-    while True:
-        frame = next(get_frame, None)
-        if frame is None:
-            break
-        _, frame = cv2.imencode('.png', frame)
-        frame = frame.tobytes()
-        yield b'--frame\r\n' + b'Content-Type: image/png\r\n\r\n' + frame + b'\r\n'
+
+def plot_png():
+    env, image, action, observation, reward, done, info = env_action()
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    ax.imshow(image)
+
+    output = io.BytesIO()
+    FigureCanvas(fig).print_png(output)
+
+    # Encode PNG image to base64 string
+    pngImageB64String = "data:image/png;base64,"
+    pngImageB64String += base64.b64encode(output.getvalue()).decode('utf8')
+
+    return pngImageB64String
 
 
-def render_browser(env_func):
-    def wrapper(*args, **kwargs):
-        @app.route('/render_feed')
-        def render_feed():
-            return Response(frame_gen(env_func, *args, **kwargs), mimetype='multipart/x-mixed-replace; boundary=frame')
-
-        print("Starting rendering, check `server_ip:5000`.")
-        app.run(port='5000', debug=False)
-
-    return wrapper
-
-
-def init_env():
+def env_action():
     game_name = 'Pong-v0'
     env = gym.make(game_name)
     env.reset()
-    return env
-
-
-@render_browser
-def random_policy():
-    env = init_env()
-
-    for _ in range(10):
-        yield env.render(mode='rgb_array')
-        # load model here
-        # policy model
-        action = env.action_space.sample()
-        # get next obs
-        env.step(action)
+    # load model here
+    # policy model
+    action = env.action_space.sample()
+    # get next obs
+    observation, reward, done, info = env.step(action)
+    image = env.render(mode='rgb_array')
+    return env, image, action, observation, reward, done, info
 
 
 if __name__ == '__main__':
-    random_policy()
+    app.run()
