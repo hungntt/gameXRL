@@ -45,5 +45,5 @@ python app/routes/routes.py
 
 ## Run Rainbow agent
 ```
-python main.py --game pong --load_model "agent/results/pong/model.pth" --architecture data-efficient --hidden-size 256 --insert_obs --evaluate 
+python main.py --game pong --model "agent/results/pong/model.pth" --architecture data-efficient --hidden-size 256 --insert_obs --evaluate 
 ```
