@@ -1,126 +1,149 @@
 from datetime import datetime
-
 from db.connect_db import connect_db
 
 
 def init_connection():
-    server, cnx = connect_db()
+    server, cnx = connect_db(mode='insert_server')
     cursor = cnx.cursor()
     return server, cnx, cursor
 
 
+def create_gym(gym):
+    """
+    Create a new gym
+    """
+    server, cnx, cursor = init_connection()
+    try:
+        gym_code = gym.get('gym_code')
+        created_at = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
+
+        query = "INSERT INTO gyms (gym_code, created_at) VALUES (%s, %s)"
+        value = (gym_code, created_at)
+        cursor.execute(query, value)
+        cnx.commit()
+        print('CREATED NEW GYM ', cursor.lastrowid, value)
+    except Exception as e:
+        print(e)
+        print('FAIL CREATE NEW GYM')
+
+    cursor.close()
+    cnx.close()
+    try:
+        server.stop()
+    except:
+        print('Connect to Local Database')
+
+
 def create_game(game):
     """
-    Create a new game
+    Create a new gym
     """
     server, cnx, cursor = init_connection()
     try:
-        game_code = game.get("game_code")
+        gym_id = game.get("gym_id")
         created_at = datetime.utcnow()
 
-        query = "INSERT INTO games (game_code, created_at) VALUES (%s, %s)"
-        value = (game_code, created_at)
-        cnx.execute(query, value)
+        query = "INSERT INTO games (gym_id, created_at) VALUES (%s, %s)"
+        value = (gym_id, created_at)
+        cursor.execute(query, value)
         cnx.commit()
-        print("CREATED NEW GAME ", cnx.lastrowid, value)
-    except:
+        print("CREATED NEW GAME ", cursor.lastrowid, value)
+    except Exception as e:
+        print(e)
         print("FAIL CREATE NEW GAME")
 
     cursor.close()
     cnx.close()
-    server.stop()
+    try:
+        server.stop()
+    except:
+        print('Connect to Local Database')
 
 
-def create_state(state):
+def create_observation(observation):
     """
-        Create a new game
-        """
+    Create a new observation
+    """
     server, cnx, cursor = init_connection()
     try:
-        state_str = state.get("state")
-        state_code = state.get("state_code")
-        game_id = state.get("game_id")
-        created_at = datetime.utcnow()
+        gym_id = observation.get('gym_id')
+        game_id = observation.get('game_id')
+        state = observation.get('state')
+        action = observation.get('action')
+        image = observation.get('image')
+        done = observation.get('done')
+        reward = observation.get('reward')
+        comment = observation.get('comment') if 'comment' in observation.keys() else 'None'
+        comment_batches_id = observation.get('comment_batches_id') \
+            if 'comment_batches_id' in observation.key() else 'None'
+        created_at = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
 
-        query = "INSERT INTO states (state, state_code, game_id, created_at) " \
-                "VALUES (%s, %s, %i, %s)"
-        value = (state_str, state_code, game_id, created_at)
-        cnx.execute(query, value)
-        print("CREATED NEW COMMENT BATCH ", cnx.lastrowid, value)
-    except:
-        print("FAIL CREATE NEW GAME")
+        query = "INSERT INTO " \
+                "observations (gym_id, game_id, state, image, comment, " \
+                "action, done, reward, comment_batches_id, created_at) " \
+                "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        value = (gym_id, game_id, state, image, comment, action, done, reward, comment_batches_id, created_at)
+        cursor.execute(query, value)
+        cnx.commit()
+        print('CREATED NEW OBSERVATION  ', cursor.lastrowid, value)
+    except Exception as e:
+        print(e)
+        print('FAIL CREATE NEW OBSERVATION')
 
     cursor.close()
     cnx.close()
-    server.stop()
-
-
-def create_action(action):
-    """
-        Create a new game
-        """
-    server, cnx, cursor = init_connection()
     try:
-        action_str = action.get("action")
-        state_id = action.get("state_id")
-        created_at = datetime.utcnow()
-
-        query = "INSERT INTO actions (action, state_id, created_at) VALUES (%s, %i, %s)"
-        value = (action_str, state_id, created_at)
-        cnx.execute(query, value)
-        print("CREATED NEW ACTION ", cnx.lastrowid, value)
+        server.stop()
     except:
-        print("FAIL CREATE NEW GAME")
-
-    cursor.close()
-    cnx.close()
-    server.stop()
-
-
-def create_comment(comment):
-    """
-        Create a new game
-        """
-    server, cnx, cursor = init_connection()
-    try:
-        comment = comment.get("comment")
-        state_id = comment.get("state_id")
-        action_id = comment.get("action_id")
-        comment_batches_id = comment.get("comment_batches_id")
-        created_at = datetime.utcnow()
-
-        query = "INSERT INTO comments (comment, state_id, action_id, comment_batches_id, created_at) " \
-                "VALUES (%s, %i, %i, %i, %s)"
-        value = (comment, state_id, action_id, comment_batches_id, created_at)
-        cnx.execute(query, value)
-        print("CREATED NEW COMMENT ", cnx.lastrowid, value)
-    except:
-        print("FAIL CREATE NEW GAME")
-
-    cursor.close()
-    cnx.close()
-    server.stop()
+        print('Connect to Local Database')
 
 
 def create_comment_batch(comment_batch):
     """
-        Create a new game
-        """
+    Create a new comment_batch
+    """
     server, cnx, cursor = init_connection()
     try:
-        comment = comment_batch.get("comment")
-        start_state_id = comment_batch.get("start_state_id")
-        end_state_id = comment_batch.get("end_state_id")
-        created_at = datetime.utcnow()
+        comment = comment_batch.get('comment')
+        start_obs_id = comment_batch.get('start_obs_id')
+        end_obs_id = comment_batch.get('end_obs_id')
+        created_at = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
 
-        query = "INSERT INTO comment_batches (comment, start_state_id, end_state_id, created_at) " \
-                "VALUES (%s, %i, %i, %s)"
-        value = (comment, start_state_id, end_state_id, created_at)
-        cnx.execute(query, value)
-        print("CREATED NEW COMMENT BATCH ", cnx.lastrowid, value)
-    except:
-        print("FAIL CREATE NEW GAME")
+        query = "INSERT INTO comment_batches (comment, start_obs_id, end_obs_id, created_at) " \
+                "VALUES (%s, %s, %s, %s)"
+        value = (comment, start_obs_id, end_obs_id, created_at)
+        cursor.execute(query, value)
+        cnx.commit()
+        print("CREATED NEW COMMENT BATCH ", cursor.lastrowid, value)
+    except Exception as e:
+        print(e)
+        print("FAIL CREATE NEW COMMENT BATCH")
 
     cursor.close()
     cnx.close()
-    server.stop()
+    try:
+        server.stop()
+    except:
+        print('Connect to Local Database')
+
+
+def select_observations_from_a_game(game_id):
+    """
+    Select a game from game_id
+    """
+    server, cnx, cursor = init_connection()
+    try:
+        query = "SELECT * FROM observations WHERE game_id = %s"
+        value = game_id
+        cursor.execute(query, value)
+        print("Get observations from game_id ", cursor.lastrowid, value)
+    except Exception as e:
+        print(e)
+        print("Fail to get observations")
+
+    cursor.close()
+    cnx.close()
+    try:
+        server.stop()
+    except:
+        print('Connect to Local Database')
