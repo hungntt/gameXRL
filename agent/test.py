@@ -27,12 +27,13 @@ def test(args, T, dqn, val_mem, metrics, results_dir, evaluate=False):
             action = dqn.act_e_greedy(state)  # Choose an action ε-greedily
             state, reward, done = env.step(action)  # Step
             reward_sum += reward
-            if args.render:
+            if args.insert_obs:
                 env.save_obs_to_db(args=args,
                                    state=state,
                                    action=action,
                                    reward=reward,
                                    done=done)
+            if args.render:
                 env.render()
 
             if done:

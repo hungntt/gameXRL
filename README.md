@@ -42,3 +42,8 @@ python app/routes/routes.py
 
 ## Database Architecture:
 ![img.png](img.png)
+
+## Run Rainbow agent
+```
+python main.py --game pong --load_model "agent/results/pong/model.pth" --architecture data-efficient --hidden-size 256 --insert_obs --evaluate 
+```
