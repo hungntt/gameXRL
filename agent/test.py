@@ -6,6 +6,7 @@ from plotly.graph_objs import Scatter
 from plotly.graph_objs.scatter import Line
 import torch
 
+from db.api import API
 from env import Env
 
 
@@ -17,18 +18,22 @@ def test(args, T, dqn, val_mem, metrics, results_dir, evaluate=False):
     T_rewards, T_Qs = [], []
 
     # Test performance over several episodes
+    api = API()
     done = True
     for _ in range(args.evaluation_episodes):
         while True:
             if done:
-                env.save_game_to_db()
+                game = {'gym_id': 1}
+                api.create_game(game)
                 state, reward_sum, done = env.reset(), 0, False
 
             action = dqn.act_e_greedy(state)  # Choose an action ε-greedily
             state, reward, done = env.step(action)  # Step
             reward_sum += reward
+
             if args.insert_obs:
-                env.save_obs_to_db(args=args,
+                env.save_obs_to_db(api=api,
+                                   game_id=api.game_last_id,
                                    state=state,
                                    action=action,
                                    reward=reward,
@@ -40,6 +45,7 @@ def test(args, T, dqn, val_mem, metrics, results_dir, evaluate=False):
                 T_rewards.append(reward_sum)
                 break
     env.close()
+    api.close_connection()
 
     # Test Q-values over validation memory
     for state in val_mem:  # Iterate over valid states

@@ -1,4 +1,4 @@
-from wtforms import Form, StringField
+from wtforms import Form, StringField, TextAreaField
 
 
 class GameForm(Form):
@@ -6,4 +6,4 @@ class GameForm(Form):
 
 
 class CommentForm(Form):
-    comment = StringField('comment')
+    comment = TextAreaField('Comment')

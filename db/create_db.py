@@ -3,7 +3,7 @@ from __future__ import print_function
 import mysql.connector as sql
 from mysql.connector import errorcode
 
-from db.api import create_gym, create_game
+from db.api import API
 from db.connect_db import connect_db
 
 DB_NAME = 'xrl'
@@ -28,11 +28,11 @@ DB_TABLES = {'gyms': (
     " `gym_id` int(11) NOT NULL,"
     " `game_id` int(11) NOT NULL,"
     " `state` varchar(2000) NOT NULL,"
-    " `image` blob,"
+    " `image` longtext,"
     " `action` int(11) NOT NULL,"
     " `done` boolean NOT NULL,"
     " `reward` float(11) NOT NULL,"
-    " `comment` varchar(2000),"
+    " `comment` longtext,"
     " `comment_batches_id` int(11),"
     " `created_at` datetime NOT NULL,"
     " PRIMARY KEY (`obs_id`), "
@@ -93,9 +93,9 @@ def create_tables(cursor):
             print("OK")
 
 
-def create_pre_data():
+def create_pre_data(api):
     gym = {'gym_code': 'pong'}
-    create_gym(gym)
+    api.create_gym(gym)
 
 
 def main():
@@ -107,6 +107,9 @@ def main():
         create_database(cursor, cnx)
         create_tables(cursor)
 
+        api = API(server, cnx, cursor)
+        create_pre_data(api)
+
         cursor.close()
         cnx.close()
         server.stop()
@@ -116,6 +119,9 @@ def main():
 
         create_database(cursor, cnx)
         create_tables(cursor)
+
+        api = API(server, cnx, cursor)
+        create_pre_data(api)
 
         cursor.close()
         cnx.close()

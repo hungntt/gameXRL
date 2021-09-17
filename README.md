@@ -13,7 +13,8 @@ pip install -r requirements
 python db/create_db.py
 ```
 - Look for function ```save_obs_to_db()``` in ```agent/test.py``` to see how to insert an observation into the database.
-- Create more API functions in ```db/api.py```
+- Create more API functions in ```db/api.py```.
+- Remember to call ```API.close_connection()``` after finishing queries to database.
 - Run web server
 ```
 python app/routes/routes.py

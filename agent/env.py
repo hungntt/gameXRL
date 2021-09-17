@@ -12,8 +12,6 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 
 import os
 
-from db.api import create_observation, create_game
-
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 
 
@@ -102,21 +100,16 @@ class Env:
         cv2.imshow('screen', self.ale.getScreenRGB()[:, :, ::-1])
         cv2.waitKey(1)
 
-    def save_obs_to_db(self, args, **kwargs):
+    def save_obs_to_db(self, api, **kwargs):
         state = dict()
         state['gym_id'] = 1
-        state['game_id'] = 1
+        state['game_id'] = kwargs.get('game_id')
         state['state'] = str(kwargs.get('state'))
         state['action'] = kwargs.get('action')
         state['reward'] = kwargs.get('reward')
         state['done'] = int(kwargs.get('done'))
         state['image'] = self.encode_img_to_base64()
-        create_observation(state)
-
-    @staticmethod
-    def save_game_to_db():
-        game = {'gym_id': 1}
-        create_game(game)
+        api.create_observation(state)
 
     def encode_img_to_base64(self):
         image = self.ale.getScreenRGB()[:, :, ::-1]
