@@ -12,6 +12,8 @@ pip install -r requirements
 ```
 python db/create_db.py
 ```
+- Customize the database schema in ```db/create_db.py```
+- Change the name of db to not interfere with other database: ```DB_NAME = 'xxx'```
 - Look for function ```save_obs_to_db()``` in ```agent/test.py``` to see how to insert an observation into the database.
 - Create more API functions in ```db/api.py```.
 - Remember to call ```API.close_connection()``` after finishing queries to database.
@@ -19,8 +21,18 @@ python db/create_db.py
 ```
 python app/routes/routes.py
 ```
-
-
+### Access to Web server
+- Set up SSH if not have SSH key pair yet: https://pastebin.pl/view/62678967.
+- After setting up SSH, input local public key to the IRender server (Password: Khang112@).
+```
+cat ~/.ssh/id_rsa.pub | ssh -p 2056 -t administrator@58.186.80.21 "mkdir -p ~/.ssh && touch ~/.ssh/authorized_keys && chmod -R go= ~/.ssh && cat >> ~/.ssh/authorized_keys"
+```
+- From now, connect directly to the IRender server without inputting the password.
+- Access to the web server, run this command in the terminal:
+```
+ssh -L 8080:192.168.20.56:2402 -p 2056 -t administrator@58.186.80.21 -N
+```
+- Access ```http://localhost:8080/``` on the web browser.
 ## Architecture
     .
     ├── ...
