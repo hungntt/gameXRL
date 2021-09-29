@@ -43,7 +43,7 @@ def connect_db(mode='server'):
         cnx = sql.connect(
                 host="localhost",
                 user="root",
-                password="Hikari@123",
+                password="password",
                 database="xrl",
         )
     return server, cnx
