@@ -1,0 +1,42 @@
+<table id="myTable">
+    <thead>
+    <tr class="header">
+        <th>State ID</th>
+        <th>State</th>
+        <th>Commentary</th>
+        <th>Action</th>
+        <th>Action Meaning</th>
+        <th>Reward</th>
+        <th>Done</th>
+        <th>Commentary Batch</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for observation in observations %}
+        <tr class={{ "table-danger" if observation[8] != 'None' else "" }}>
+            <td>{{ observation[0] }}</td>
+            <td><img src="{{ observation[4] }}" alt=""></td>
+            <td>
+                {% if observation[8] == 'None' %}
+                    <a href={{ url_for('comment_to_an_obs_id', obs_id=observation[0]) }}>Comment</a>
+                {% else %}
+                    <a href={{ url_for('comment_to_an_obs_id', obs_id=observation[0]) }}>Update</a><br>
+                    {{ observation[8] }}
+                    </td>
+                {% endif %}
+            <td>{{ observation[5] }}</td>
+            <td>
+                {% if observation[5] == 0 %}NOOP{% endif %}
+                {% if observation[5] == 1 %}FIRE (=NOOP){% endif %}
+                {% if observation[5] == 2 %}RIGHT (=UP){% endif %}
+                {% if observation[5] == 3 %}LEFT (=DOWN){% endif %}
+                {% if observation[5] == 4 %}RIGHTFIRE (=FAST UP){% endif %}
+                {% if observation[5] == 5 %}LEFTFIRE (=FAST DOWN){% endif %}
+            </td>
+            <td>{{ observation[7] }}</td>
+            <td>{{ 'Done' if observation[6] == 1 else 'Not Done' }}</td>
+            <td>{{ 'None' if observation[9] == -1 else observation[9] }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

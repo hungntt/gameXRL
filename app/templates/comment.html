@@ -21,33 +21,6 @@
         </dl>
         <p><input type=submit value=Submit>
     </form>
-
-    <table id="myTable">
-        <thead>
-        <tr class="header">
-            <th>State ID</th>
-            <th>State</th>
-            <th>Commentary</th>
-            <th>Action</th>
-            <th>Reward</th>
-            <th>Done</th>
-            <th>Commentary Batch</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for observation in observations %}
-            <tr>
-                <td>{{ observation[0] }}</td>
-                <td><img src="{{ observation[4] }}" alt=""></td>
-                <td>{{ observation[8] }}</td>
-                <td>{{ observation[5] }}</td>
-                <td>{{ observation[7] }}</td>
-                <td>{{ 'Done' if observation[6] == 1 else 'Not Done' }}</td>
-                <td>{{ 'None' if observation[9] == -1 else observation[9] }}</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    {% include '_table_game.html' %}
 </div>
 </body>
-</html>

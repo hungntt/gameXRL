@@ -99,7 +99,7 @@ def create_pre_data(api):
 
 
 def main():
-    mode = 'server'
+    mode = 'local'
     if mode == 'server':
         server, cnx = connect_db('server')
         cursor = cnx.cursor()

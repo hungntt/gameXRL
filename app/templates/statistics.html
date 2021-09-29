@@ -1,0 +1,19 @@
+{% include '_header.html' %}
+<body>
+{% include 'navbar.html' %}
+<div class="container">
+    <h1><b>Statistics</b></h1>
+    <h2>Statistics of Pong game commented observations</h2>
+    {% for i in range(range_obs) %}
+        <div class="py-2">Commented observations/Total observations: {{ commented_obs[i] }}/{{ all_obs[i] }}</div>
+        <div class="progress">
+            <div class="progress-bar progress-bar-striped progress-bar-animated
+                {% if commented_obs_percents[i]<=25 %} bg-danger {% endif %}
+                {% if commented_obs_percents[i] <= 75 %} bg-info {% endif %}"
+                 role="progressbar" aria-valuenow="{{ commented_obs[i] }}"
+                 aria-valuemin="0" aria-valuemax="{{ all_obs[i] }}"
+                 style="width: {{ commented_obs_percents[i] }}%"></div>
+        </div>
+    {% endfor %}
+</div>
+</body>

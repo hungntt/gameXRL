@@ -13,7 +13,7 @@ class API:
 
     @staticmethod
     def init_connection():
-        server, cnx = connect_db(mode='insert_server')
+        server, cnx = connect_db(mode='insert_local')
         cursor = cnx.cursor()
         return server, cnx, cursor
 
@@ -186,3 +186,60 @@ class API:
             print(e)
             print("Fail to get observations")
 
+    def get_lens_observations(self, **kwargs):
+        """
+        Get the number of observations
+        """
+        try:
+            if 'game_id' in kwargs.keys():
+                # By game_id
+                game_id = kwargs.get('game_id')
+                query = "SELECT COUNT(*) FROM observations WHERE game_id = %s"
+                value = (game_id,)
+                self.cursor.execute(query, value)
+            elif 'gym_id' in kwargs.keys():
+                # By gym_id
+                gym_id = kwargs.get('gym_id')
+                query = "SELECT COUNT(*) FROM observations WHERE gym_id = %s"
+                value = (gym_id,)
+                self.cursor.execute(query, value)
+            else:
+                # All observations
+                query = "SELECT COUNT(*) FROM observations"
+                self.cursor.execute(query)
+
+            lens_observations = self.cursor.fetchone()
+            print("Get the number of observations ", self.cursor.lastrowid)
+            return lens_observations[0]
+        except Exception as e:
+            print(e)
+            print("Fail to get the number of observations")
+
+    def get_lens_commented_observations(self, **kwargs):
+        """
+        Get the number of commented observations
+        """
+        try:
+            if 'game_id' in kwargs.keys():
+                # By game_id
+                game_id = kwargs.get('game_id')
+                query = "SELECT COUNT(*) FROM observations WHERE game_id = %s AND comment != 'None'"
+                value = (game_id,)
+                self.cursor.execute(query, value)
+            elif 'gym_id' in kwargs.keys():
+                # By gym_id
+                gym_id = kwargs.get('gym_id')
+                query = "SELECT COUNT(*) FROM observations WHERE gym_id = %s AND comment != 'None'"
+                value = (gym_id,)
+                self.cursor.execute(query, value)
+            else:
+                # All observations
+                query = "SELECT COUNT(*) FROM observations WHERE comment != 'None'"
+                self.cursor.execute(query)
+
+            lens_observations = self.cursor.fetchone()
+            print("Get the number of commented observations ", self.cursor.lastrowid)
+            return lens_observations[0]
+        except Exception as e:
+            print(e)
+            print("Fail to get the number of commented observations")

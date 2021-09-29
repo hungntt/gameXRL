@@ -1,8 +1,7 @@
 import base64
 import io
-import re
-from flask import render_template, request, flash, redirect
 
+from flask import render_template, request, flash, redirect
 from matplotlib import pyplot as plt
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 
@@ -60,6 +59,29 @@ def comment_to_an_obs_id(obs_id):
     return render_template('comment.html', form=form, observations=observation)
 
 
+@app.route('/statistics', )
+def show_statistics():
+    api = API()
+    commented_obs = list()
+    all_obs = list()
+    commented_obs_percents = list()
+
+    game_ids = api.get_all_games_id_of_a_gym(gym_id=1)
+
+    for game_id in game_ids:
+        game_id = game_id[0]
+        commented_obs.append(api.get_lens_commented_observations(game_id=game_id))
+        all_obs.append(api.get_lens_observations(game_id=game_id))
+        commented_obs_percents.append(int(commented_obs[len(commented_obs) - 1] / all_obs[len(all_obs) - 1] * 100))
+    range_obs = len(commented_obs_percents)
+    return render_template('statistics.html',
+                           game_ids=game_ids,
+                           range_obs=range_obs,
+                           commented_obs=commented_obs,
+                           all_obs=all_obs,
+                           commented_obs_percents=commented_obs_percents)
+
+
 def plot_png(image):
     fig = plt.figure()
     ax = fig.add_subplot(111)
@@ -76,4 +98,4 @@ def plot_png(image):
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0', port=2402)

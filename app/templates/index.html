@@ -2,15 +2,22 @@
 
 <body>
 {% include 'navbar.html' %}
-<div class="container-fluid">
-    <h1></h1>
+<div class="container mt-5">
     <h2>Choose a game from pre-rendered Pong environment</h2>
-    {% for game_id in game_ids %}
-        <a class="btn btn-primary btn-lg" href={{ url_for('show_game', game_id=game_id[0]) }} role="button">
-            Game {{ game_id[0] }}
-        </a>
-    {% endfor %}
+    <div class="text-center">
+        {% for game_id in game_ids %}
+            <a class="btn btn-primary btn-lg" href={{ url_for('show_game', game_id=game_id[0]) }} role="button">
+                Game {{ game_id[0] }}
+            </a>
+        {% endfor %}
+    </div>
+    <div class="card text-center mt-5">
+        <div class="card-body">
+            <h5 class="card-title">Statistics Dashboard</h5>
+            <p class="card-text">Information of the status of commented observations.</p>
+            <a href="{{ url_for('show_statistics') }}" class="btn btn-primary btn-lg">Statistics >></a>
+        </div>
+    </div>
 
 </div>
 </body>
-</html>
