@@ -12,7 +12,9 @@
                 {% if commented_obs_percents[i] <= 75 %} bg-info {% endif %}"
                  role="progressbar" aria-valuenow="{{ commented_obs[i] }}"
                  aria-valuemin="0" aria-valuemax="{{ all_obs[i] }}"
-                 style="width: {{ commented_obs_percents[i] }}%"></div>
+                 style="width: {{ commented_obs_percents[i] }}%">
+                {{ commented_obs_percents[i] }}% completed
+            </div>
         </div>
     {% endfor %}
 </div>

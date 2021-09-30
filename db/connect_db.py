@@ -22,7 +22,8 @@ def connect_db(mode='server'):
         cnx = sql.connect(
                 host="localhost",
                 user="root",
-                password="Hikari@123",
+                port="1402",
+                password="password",
         )
     elif mode == 'insert_server':
         server = SSHTunnelForwarder(
@@ -43,6 +44,7 @@ def connect_db(mode='server'):
         cnx = sql.connect(
                 host="localhost",
                 user="root",
+                port="1402",
                 password="password",
                 database="xrl",
         )

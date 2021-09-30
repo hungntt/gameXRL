@@ -6,7 +6,7 @@ from matplotlib import pyplot as plt
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 
 from app import app
-from app.routes.forms import CommentForm
+from app.routes.forms import CommentForm, CommentBatchForm
 from db.api import API
 
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
@@ -38,6 +38,14 @@ def show_games_from_to_obs_id(game_id, fobs_id, tobs_id):
     return render_template('show_game.html', game_id=game_id, observations=observations)
 
 
+@app.route('/obs/<int:fobs_id>/<int:tobs_id>')
+def show_from_to_obs_id(fobs_id, tobs_id):
+    api = API()
+    observations = api.select_observations_from_id_to_id(fobs_id, tobs_id)
+    api.close_connection()
+    return render_template('show_game.html', observations=observations)
+
+
 @app.route('/obs/<int:obs_id>')
 def show_an_observation_from_an_obs_id(obs_id):
     api = API()
@@ -52,14 +60,37 @@ def comment_to_an_obs_id(obs_id):
     observation = api.select_an_observation_from_an_obs_id(obs_id)
     form = CommentForm(request.form)
     if request.method == 'POST':
-        api.comment_to_an_obs_id(obs_id, form.data.get('comment'))
-        flash('New comment created/updated successfully.')
+        try:
+            api.comment_to_an_obs_id(obs_id, form.data.get('comment'))
+            flash('New comment created/updated successfully.')
+        except Exception as e:
+            flash(e)
         api.close_connection()
         return redirect(f'/obs/{obs_id}')
     return render_template('comment.html', form=form, observations=observation)
 
 
-@app.route('/statistics', )
+@app.route('/comment_batch', methods=['GET', 'POST'])
+def comment_many_obs():
+    api = API()
+    form = CommentBatchForm(request.form)
+    if request.method == 'POST':
+        try:
+            start_obs_id = form.data.get('start_obs_id')
+            end_obs_id = form.data.get('end_obs_id')
+            if start_obs_id >= end_obs_id:
+                flash(u'Start obs id must be smaller than End obs id', 'error')
+                return redirect(f'/comment_batch')
+            api.comment_to_many_obs_id(start_obs_id, end_obs_id, form.data.get('comment'))
+            flash('New comment batches created/updated successfully.')
+            return redirect(f'/obs/{start_obs_id}/{end_obs_id}')
+        except Exception as e:
+            flash(e, 'error')
+        api.close_connection()
+    return render_template('comment_batch.html', form=form)
+
+
+@app.route('/statistics')
 def show_statistics():
     api = API()
     commented_obs = list()

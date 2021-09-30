@@ -11,13 +11,25 @@
             </a>
         {% endfor %}
     </div>
-    <div class="card text-center mt-5">
-        <div class="card-body">
-            <h5 class="card-title">Statistics Dashboard</h5>
-            <p class="card-text">Information of the status of commented observations.</p>
-            <a href="{{ url_for('show_statistics') }}" class="btn btn-primary btn-lg">Statistics >></a>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="card text-center mt-5">
+                <div class="card-body">
+                    <h5 class="card-title">Statistics Dashboard</h5>
+                    <p class="card-text">Information of the status of commented observations.</p>
+                    <a href="{{ url_for('show_statistics') }}" class="btn btn-primary btn-lg">Statistics >></a>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="card text-center mt-5">
+                <div class="card-body">
+                    <h5 class="card-title">Batch Commentary</h5>
+                    <p class="card-text">Fast comment for multiple observations.</p>
+                    <a href="{{ url_for('comment_many_obs') }}" class="btn btn-primary">Comment >></a>
+                </div>
+            </div>
         </div>
     </div>
-
 </div>
 </body>
