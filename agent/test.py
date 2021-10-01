@@ -23,9 +23,8 @@ def test(args, T, dqn, val_mem, metrics, results_dir, evaluate=False):
     for _ in range(args.evaluation_episodes):
         while True:
             if done:
-                if args.insert_obs:
-                    game = {'gym_id': 1}
-                    api.create_game(game)
+                game = {'gym_id': 1}
+                api.create_game(game)
                 state, reward_sum, done = env.reset(), 0, False
 
             action = dqn.act_e_greedy(state)  # Choose an action ε-greedily

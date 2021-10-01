@@ -1,4 +1,9 @@
+
+
 from __future__ import print_function
+
+import sys
+sys.path.append('/home/silver/gameXRL-master')
 
 import mysql.connector as sql
 from mysql.connector import errorcode

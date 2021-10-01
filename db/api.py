@@ -13,7 +13,8 @@ class API:
 
     @staticmethod
     def init_connection():
-        server, cnx = connect_db(mode='insert_local')
+        # server, cnx = connect_db(mode='insert_server')
+        server, cnx = connect_db(mode='local')
         cursor = cnx.cursor()
         return server, cnx, cursor
 
@@ -91,12 +92,16 @@ class API:
             print(e)
             print('FAIL CREATE NEW OBSERVATION')
 
-    def create_comment_batch(self, start_obs_id, end_obs_id, comment):
+    def create_comment_batch(self, comment_batch):
         """
         Create a new comment_batch
         """
         try:
+            comment = comment_batch.get('comment')
+            start_obs_id = comment_batch.get('start_obs_id')
+            end_obs_id = comment_batch.get('end_obs_id')
             created_at = self.utc_now
+
             query = "INSERT INTO comment_batches (comment, start_obs_id, end_obs_id, created_at) " \
                     "VALUES (%s, %s, %s, %s)"
             value = (comment, start_obs_id, end_obs_id, created_at)
@@ -153,42 +158,19 @@ class API:
             print(e)
             print("Fail to get observations")
 
-    def select_observations_from_id_to_id(self, fobs_id, tobs_id):
-        """
-        Select a game from game_id, in range obs_id to obs_id
-        """
-        try:
-            query = "SELECT * FROM observations WHERE obs_id BETWEEN %s AND %s"
-            value = (fobs_id, tobs_id)
-            self.cursor.execute(query, value)
-            observations = self.cursor.fetchall()
-            print("Get observations from %s to %s ", fobs_id, tobs_id, value)
-            return observations
-        except Exception as e:
-            print(e)
-            print("Fail to get observations")
-
     def comment_to_an_obs_id(self, obs_id, input_comment):
         """
         Comment to a obs_id state
         """
-        query = "UPDATE observations SET comment = %s WHERE obs_id = %s"
-        value = (input_comment, obs_id)
-        self.cursor.execute(query, value)
-        self.cnx.commit()
-        print("Insert comment to obs_id", obs_id, input_comment)
-
-    def comment_to_many_obs_id(self, start_obs_id, end_obs_id, input_comment):
-        """
-        Comment to a batch of observations
-        """
-        for i in range(int(start_obs_id), int(end_obs_id) + 1):
-            comment_query = "UPDATE observations SET comment = %s WHERE obs_id = %s"
-            comment_value = (input_comment, i)
-            self.cursor.execute(comment_query, comment_value)
-            print("Insert comment to obs_id %s", i, input_comment)
-        self.cnx.commit()
-        self.create_comment_batch(start_obs_id, end_obs_id, input_comment)
+        try:
+            query = "UPDATE observations SET comment = %s WHERE obs_id = %s"
+            value = (input_comment, obs_id)
+            self.cursor.execute(query, value)
+            self.cnx.commit()
+            print("Insert comment to obs_id", obs_id, input_comment)
+        except Exception as e:
+            print(e)
+            print("Fail to insert comment ")
 
     def get_all_games_id_of_a_gym(self, gym_id):
         """
@@ -205,60 +187,3 @@ class API:
             print(e)
             print("Fail to get observations")
 
-    def get_lens_observations(self, **kwargs):
-        """
-        Get the number of observations
-        """
-        try:
-            if 'game_id' in kwargs.keys():
-                # By game_id
-                game_id = kwargs.get('game_id')
-                query = "SELECT COUNT(*) FROM observations WHERE game_id = %s"
-                value = (game_id,)
-                self.cursor.execute(query, value)
-            elif 'gym_id' in kwargs.keys():
-                # By gym_id
-                gym_id = kwargs.get('gym_id')
-                query = "SELECT COUNT(*) FROM observations WHERE gym_id = %s"
-                value = (gym_id,)
-                self.cursor.execute(query, value)
-            else:
-                # All observations
-                query = "SELECT COUNT(*) FROM observations"
-                self.cursor.execute(query)
-
-            lens_observations = self.cursor.fetchone()
-            print("Get the number of observations ", self.cursor.lastrowid)
-            return lens_observations[0]
-        except Exception as e:
-            print(e)
-            print("Fail to get the number of observations")
-
-    def get_lens_commented_observations(self, **kwargs):
-        """
-        Get the number of commented observations
-        """
-        try:
-            if 'game_id' in kwargs.keys():
-                # By game_id
-                game_id = kwargs.get('game_id')
-                query = "SELECT COUNT(*) FROM observations WHERE game_id = %s AND comment != 'None'"
-                value = (game_id,)
-                self.cursor.execute(query, value)
-            elif 'gym_id' in kwargs.keys():
-                # By gym_id
-                gym_id = kwargs.get('gym_id')
-                query = "SELECT COUNT(*) FROM observations WHERE gym_id = %s AND comment != 'None'"
-                value = (gym_id,)
-                self.cursor.execute(query, value)
-            else:
-                # All observations
-                query = "SELECT COUNT(*) FROM observations WHERE comment != 'None'"
-                self.cursor.execute(query)
-
-            lens_observations = self.cursor.fetchone()
-            print("Get the number of commented observations ", self.cursor.lastrowid)
-            return lens_observations[0]
-        except Exception as e:
-            print(e)
-            print("Fail to get the number of commented observations")
