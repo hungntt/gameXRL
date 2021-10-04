@@ -48,4 +48,12 @@ def connect_db(mode='server'):
                 password="password",
                 database="xrl",
         )
+    elif mode == 'insert_local_minigrid':
+        cnx = sql.connect(
+                host="localhost",
+                user="root",
+                port="1402",
+                password="password",
+                database="minigrid",
+        )
     return server, cnx

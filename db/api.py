@@ -13,6 +13,7 @@ class API:
 
     @staticmethod
     def init_connection():
+        # Change to insert_local_minigrid if minigrid game
         server, cnx = connect_db(mode='insert_local')
         cursor = cnx.cursor()
         return server, cnx, cursor
@@ -26,12 +27,11 @@ class API:
         if self.server is not None:
             self.server.close()
 
-    def create_gym(self, gym):
+    def create_gym(self, gym_code):
         """
         Create a new gym
         """
         try:
-            gym_code = gym.get('gym_code')
             created_at = self.utc_now
 
             query = "INSERT INTO gyms (gym_code, created_at) VALUES (%s, %s)"

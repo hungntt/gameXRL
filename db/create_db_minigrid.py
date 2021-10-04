@@ -6,7 +6,7 @@ from mysql.connector import errorcode
 from db.api import API
 from db.connect_db import connect_db
 
-DB_NAME = 'xrl'
+DB_NAME = 'minigrid'
 DB_TABLES = {'gyms': (
     "CREATE TABLE `gyms` ("
     " `gym_id` int(11) NOT NULL AUTO_INCREMENT,"
@@ -30,6 +30,7 @@ DB_TABLES = {'gyms': (
     " `state` varchar(2000) NOT NULL,"
     " `image` longtext,"
     " `action` int(11) NOT NULL,"
+    " `action_meaning` varchar(30),"
     " `done` boolean NOT NULL,"
     " `reward` float(11) NOT NULL,"
     " `comment` longtext,"
@@ -94,7 +95,7 @@ def create_tables(cursor):
 
 
 def create_pre_data(api):
-    api.create_gym(gym_code='pong')
+    api.create_gym(gym_code='minigrid')
 
 
 def main():
