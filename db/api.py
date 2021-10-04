@@ -14,7 +14,7 @@ class API:
     @staticmethod
     def init_connection():
         # Change to insert_local_minigrid if minigrid game
-        server, cnx = connect_db(mode='insert_local')
+        server, cnx = connect_db(mode='insert_server_minigrid')
         cursor = cnx.cursor()
         return server, cnx, cursor
 

@@ -99,7 +99,7 @@ def create_pre_data(api):
 
 
 def main():
-    mode = 'local'
+    mode = 'server'
     if mode == 'server':
         server, cnx = connect_db('server')
         cursor = cnx.cursor()
@@ -107,8 +107,8 @@ def main():
         create_database(cursor, cnx)
         create_tables(cursor)
 
-        api = API(server, cnx, cursor)
-        create_pre_data(api)
+        # api = API(server, cnx, cursor)
+        # create_pre_data(api)
 
         cursor.close()
         cnx.close()
@@ -120,8 +120,8 @@ def main():
         create_database(cursor, cnx)
         create_tables(cursor)
 
-        api = API(server, cnx, cursor)
-        create_pre_data(api)
+        # api = API(server, cnx, cursor)
+        # create_pre_data(api)
 
         cursor.close()
         cnx.close()

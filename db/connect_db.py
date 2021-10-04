@@ -40,6 +40,21 @@ def connect_db(mode='server'):
                 port=server.local_bind_port,
                 database="xrl",
         )
+    elif mode == 'insert_server_minigrid':
+        server = SSHTunnelForwarder(
+                ('58.186.80.21', 2056),  # If port 2056 timed out, replace with port 22
+                ssh_username="administrator",
+                ssh_password="Khang112@",
+                remote_bind_address=('0.0.0.0', 1402),
+        )
+        server.start()
+        cnx = sql.connect(
+                host="localhost",
+                user="root",
+                password="password",
+                port=server.local_bind_port,
+                database="minigrid",
+        )
     elif mode == 'insert_local':
         cnx = sql.connect(
                 host="localhost",
