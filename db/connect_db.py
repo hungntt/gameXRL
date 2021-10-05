@@ -25,7 +25,7 @@ def connect_db(mode='server'):
                 port="1402",
                 password="password",
         )
-    elif mode == 'insert_server':
+    elif mode == 'insert_server_pong':
         server = SSHTunnelForwarder(
                 ('58.186.80.21', 2056),  # If port 2056 timed out, replace with port 22
                 ssh_username="administrator",

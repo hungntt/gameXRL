@@ -3,7 +3,8 @@ from db.connect_db import connect_db
 
 
 class API:
-    def __init__(self, server=None, cnx=None, cursor=None):
+    def __init__(self, server=None, cnx=None, cursor=None, db=None):
+        self.db = 'insert_server_pong' if db is None else db
         if server is None or cnx is None or cursor is None:
             self.server, self.cnx, self.cursor = self.init_connection()
         else:
@@ -11,10 +12,9 @@ class API:
         self.utc_now = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
         self.gym_last_id, self.game_last_id, self.comment_batch_last_id = None, None, None
 
-    @staticmethod
-    def init_connection():
+    def init_connection(self):
         # Change to insert_local_minigrid if minigrid game
-        server, cnx = connect_db(mode='insert_server_minigrid')
+        server, cnx = connect_db(mode=self.db)
         cursor = cnx.cursor()
         return server, cnx, cursor
 

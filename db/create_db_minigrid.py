@@ -57,7 +57,7 @@ DB_TABLES = {'gyms': (
 ### Create MySQL Connection And Connect
 def create_database(cursor, cnx):
     try:
-        cursor.execute("DROP DATABASE xrl")
+        cursor.execute("DROP DATABASE {}".format(DB_NAME))
         print('Drop old database')
     except sql.errors.DatabaseError:
         print('Database not created yet')
