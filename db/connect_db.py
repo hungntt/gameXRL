@@ -55,7 +55,7 @@ def connect_db(mode='server'):
                 port=server.local_bind_port,
                 database="minigrid",
         )
-    elif mode == 'insert_local':
+    elif mode == 'insert_local_pong':
         cnx = sql.connect(
                 host="localhost",
                 user="root",

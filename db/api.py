@@ -79,11 +79,20 @@ class API:
                 if 'comment_batches_id' in observation.keys() else -1
             created_at = self.utc_now
 
-            query = "INSERT INTO " \
-                    "observations (gym_id, game_id, state, image, comment, " \
-                    "action, done, reward, comment_batches_id, created_at) " \
-                    "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-            value = (gym_id, game_id, state, image, comment, action, done, reward, comment_batches_id, created_at)
+            if 'action_meaning' in observation.keys():
+                action_meaning = observation.get('action_meaning')
+                query = "INSERT INTO " \
+                        "observations (gym_id, game_id, state, image, comment, " \
+                        "action, action_meaning, done, reward, comment_batches_id, created_at) " \
+                        "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                value = (gym_id, game_id, state, image, comment, action, action_meaning, done, reward,
+                         comment_batches_id, created_at)
+            else:
+                query = "INSERT INTO " \
+                        "observations (gym_id, game_id, state, image, comment, " \
+                        "action, done, reward, comment_batches_id, created_at) " \
+                        "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                value = (gym_id, game_id, state, image, comment, action, done, reward, comment_batches_id, created_at)
             self.cursor.execute(query, value)
             self.cnx.commit()
             print('CREATED NEW OBSERVATION  ', self.cursor.lastrowid, value)
