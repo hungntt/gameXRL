@@ -272,3 +272,18 @@ class API:
         except Exception as e:
             print(e)
             print("Fail to get the number of commented observations")
+
+    def get_obs_id_by_turns(self, game_id):
+        """
+        Get the number of commented observations
+        """
+        try:
+            query = "SELECT obs_id FROM observations WHERE game_id = %s AND reward != %s"
+            value = (game_id, 0,)
+            self.cursor.execute(query, value)
+            observations = self.cursor.fetchall()
+            print("Get observations id by turns from game_id ", value)
+            return observations
+        except Exception as e:
+            print(e)
+            print("Fail to get observations id by turns from game_id")

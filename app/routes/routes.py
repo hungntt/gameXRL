@@ -1,4 +1,5 @@
 from flask import render_template, request, flash, redirect, url_for
+from flask_paginate import Pagination, get_page_args, get_page_parameter
 
 from app import app
 from app.routes.forms import CommentForm, CommentBatchForm
@@ -23,10 +24,44 @@ def index():
 def show_game(gym_code, game_id):
     observations = None
     if gym_code == 'pong':
-        observations = pong_api.select_observations_from_a_game(game_id)
+        return redirect(url_for("show_pong_turns", game_id=game_id))
     elif gym_code == 'minigrid':
         observations = minigrid_api.select_observations_from_a_game(game_id)
     return render_template('show_game.html', game_id=game_id, observations=observations, gym_code=gym_code)
+
+
+@app.route('/pong/game/<int:game_id>/turn/', methods=['GET', 'POST'])
+def show_pong_turns(game_id):
+    obs_id_end_turn_list = pong_api.get_obs_id_by_turns(game_id=game_id)
+    obs_turn_count = len(obs_id_end_turn_list)
+    per_page = 1
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+    if page == 1:
+        obs_by_turn = pong_api. \
+            select_observations_from_a_game_from_id_to_id(game_id=game_id, fobs_id=1,
+                                                          tobs_id=obs_id_end_turn_list[page - 1][0] - 1)
+    else:
+        obs_by_turn = pong_api. \
+            select_observations_from_a_game_from_id_to_id(game_id=game_id,
+                                                          fobs_id=obs_id_end_turn_list[page - 2][0],
+                                                          tobs_id=obs_id_end_turn_list[page - 1][0] - 1)
+    pagination = Pagination(page=page, per_page=per_page, total=obs_turn_count, css_framework='bootstrap4')
+    form = CommentBatchForm(request.form)
+    if request.method == 'POST':
+        try:
+            start_obs_id = form.data.get('start_obs_id')
+            end_obs_id = form.data.get('end_obs_id')
+            if int(start_obs_id) >= int(end_obs_id):
+                flash(u'Start obs id must be smaller than End obs id', 'error')
+                return render_template(comment_many_obs(gym_code='pong'))
+            pong_api.comment_to_many_obs_id(start_obs_id, end_obs_id, form.data.get('comment'))
+            flash('New comment batches created/updated successfully.')
+            return redirect(url_for('show_from_to_obs_id', gym_code='pong',
+                                    fobs_id=start_obs_id, tobs_id=end_obs_id))
+        except Exception as e:
+            flash(e, 'error')
+    return render_template('show_game_pagination.html', gym_code='pong',
+                           game_id=game_id, observations=obs_by_turn, pagination=pagination, form=form)
 
 
 @app.route('/<string:gym_code>/game/<int:game_id>/<int:fobs_id>/<int:tobs_id>')

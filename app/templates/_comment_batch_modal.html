@@ -1,0 +1,31 @@
+<!-- Modal -->
+<div class="modal fade bd-example-modal-lg" id="exampleModal" tabindex="-1" role="dialog"
+     aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Pong Batch Comment</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                {% from "_formhelpers.html" import render_field %}
+                <form method=post>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            {{ render_field(form.start_obs_id, id="start") }}
+                        </div>
+                        <div class="form-group col-md-6">
+                            {{ render_field(form.end_obs_id, id="end") }}
+                        </div>
+                    </div>
+                    <dl>{{ render_field(form.comment) }}</dl>
+                    <p>
+                        <button class="btn btn-primary" type=submit value=Submit>Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

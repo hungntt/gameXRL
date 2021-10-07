@@ -2,9 +2,88 @@
 <html lang="">
 <head>
     <title>GameXRL</title>
-    <link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Raleway&display=swap" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body, #wrapper {
+            height: 80%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            border: 0;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            text-align: center;
+        }
+
+        #wrapper td {
+            vertical-align: middle;
+            text-align: center;
+        }
+
+        #cmt {
+            height: 120px;
+            width: 200px;
+        }
+
+
+        #myInput {
+            background-position: 10px 10px;
+            background-repeat: no-repeat;
+            width: 100%;
+            font-size: 16px;
+            padding: 12px 20px 12px 40px;
+            border: 1px solid #ddd;
+            margin-bottom: 12px;
+        }
+
+        #myTable {
+            border-collapse: collapse;
+            width: 100%;
+            border: 1px solid #ddd;
+            font-size: 18px;
+        }
+
+        td {
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        #myTable th, #myTable td {
+            text-align: center;
+            vertical-align: middle;
+            padding: 12px;
+        }
+
+        #myTable tr {
+            border-bottom: 1px solid #ddd;
+        }
+
+        #myTable tr.header, #myTable tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        button.stick-bot-right {
+            position: fixed;
+            bottom: 5px;
+            right: 5px;
+        }
+    </style>
 </head>
