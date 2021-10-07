@@ -5,13 +5,20 @@
 <div class="container mt-5">
     <h2>Choose a game from pre-rendered Pong environment</h2>
     <div class="text-center">
-        {% for game_id in game_ids %}
-            <a class="btn btn-primary btn-lg" href={{ url_for('show_game', game_id=game_id[0]) }} role="button">
+        {% for game_id in pong_game_ids %}
+            <a class="btn btn-primary btn-lg" href={{ url_for('show_game', gym_code='pong', game_id=game_id[0]) }}>
                 Game {{ game_id[0] }}
             </a>
         {% endfor %}
     </div>
-    <h2>Choose a game from pre-rendered MiniGrid environment</h2>
+    <h2 class="mt-5">Choose a game from pre-rendered MiniGrid environment</h2>
+    <div class="text-center">
+        {% for game_id in minigrid_game_ids %}
+            <a class="btn btn-danger btn-lg" href={{ url_for('show_game', gym_code='minigrid', game_id=game_id[0]) }}>
+                Game {{ game_id[0] }}
+            </a>
+        {% endfor %}
+    </div>
     <div class="row">
         <div class="col-sm-6">
             <div class="card text-center mt-5">
@@ -27,7 +34,8 @@
                 <div class="card-body">
                     <h5 class="card-title">Batch Commentary</h5>
                     <p class="card-text">Fast comment for multiple observations.</p>
-                    <a href="{{ url_for('comment_many_obs') }}" class="btn btn-primary">Comment >></a>
+                    <a href="{{ url_for('comment_many_obs', gym_code='pong') }}" class="btn btn-primary btn-lg">Pong >></a>
+                    <a href="{{ url_for('comment_many_obs', gym_code='minigrid') }}" class="btn btn-danger btn-lg">Minigrid >></a>
                 </div>
             </div>
         </div>

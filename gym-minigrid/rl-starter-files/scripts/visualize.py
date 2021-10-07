@@ -5,8 +5,9 @@ import io
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 import utils
-from utils import device
 
+from db.api import API
+a = Agent()
 # Parse arguments
 
 parser = argparse.ArgumentParser()
@@ -36,10 +37,6 @@ args = parser.parse_args()
 # Set seed for all randomness sources
 
 utils.seed(args.seed)
-
-# Set device
-
-print(f"Device: {device}\n")
 
 # Load environment
 
@@ -82,6 +79,23 @@ def encode_img_to_base64(arr_image):
     return pngImageB64String
 
 
+def action_meaning(x=0):
+    if x == 0:
+        return "Turn left"
+    elif x == 1:
+        return "Turn right"
+    elif x == 2:
+        return "Move forward"
+    elif x == 3:
+        return "Pick up an object"
+    elif x == 4:
+        return "Drop an object"
+    elif x == 5:
+        return "Toggle/activate an object"
+    elif x == 6:
+        return "Done completing task"
+
+
 for episode in range(args.episodes):
     obs = env.reset()
     i = 1
@@ -95,27 +109,26 @@ for episode in range(args.episodes):
         obs, reward, done, _ = env.step(action)
         # print ( encode_img_to_base64(env.render("rgb_array")) )
         agent.analyze_feedback(reward, done)
-
+        # api = API(db='insert_server_minigrid')
+        api = API(db='insert_server_minigrid')
+        game = {'gym_id': 1}
+        api.create_game(game)
         # save to db
         state = dict()
-        # print (action)
         state['gym_id'] = 1
-        state['game_id'] = 6
-        state['state'] = ""
+        state['game_id'] = api.game_last_id
+        state['state'] = obs
         state['action'] = action.item()
+        state['action_meaning'] = action_meaning(action.item)
         state['reward'] = reward
         ndone = 0
         if done:
             ndone = 1
         state['done'] = ndone
         state['image'] = encode_img_to_base64(env.render("rgb_array"))
-        import sys
 
-        sys.path.append('/home/silver/gameXRL-master')
-        from db.api import API
-
-        API().create_observation(state)
-
+        api.create_observation(state)
+        api.close_connection()
         if done or env.window.closed:
             break
 

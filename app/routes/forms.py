@@ -1,4 +1,9 @@
-from wtforms import Form, StringField, TextAreaField
+from wtforms import widgets, Form, StringField, TextAreaField, SelectMultipleField
+
+
+class MultiCheckboxField(SelectMultipleField):
+    widget = widgets.ListWidget(prefix_label=False)
+    option_widget = widgets.CheckboxInput()
 
 
 class GameForm(Form):

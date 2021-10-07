@@ -2,7 +2,7 @@
 <body>
 {% include 'navbar.html' %}
 <div class="container-fluid">
-    <h1><b>Comment to multiple states</b></h1>
+    <h1 class="mx-3"><b>Batch comment for {{ gym_code }} game</b></h1>
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             <ul class=flashes>

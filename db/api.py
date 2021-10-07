@@ -3,8 +3,9 @@ from db.connect_db import connect_db
 
 
 class API:
-    def __init__(self, server=None, cnx=None, cursor=None, db=None):
-        self.db = 'insert_server_pong' if db is None else db
+    def __init__(self, server=None, cnx=None, cursor=None, cnx_type=None, db=None):
+        self.cnx_type = cnx_type
+        self.db = db
         if server is None or cnx is None or cursor is None:
             self.server, self.cnx, self.cursor = self.init_connection()
         else:
@@ -14,7 +15,7 @@ class API:
 
     def init_connection(self):
         # Change to insert_local_minigrid if minigrid game
-        server, cnx = connect_db(mode=self.db)
+        server, cnx = connect_db(cnx_type=self.cnx_type, db=self.db)
         cursor = cnx.cursor()
         return server, cnx, cursor
 

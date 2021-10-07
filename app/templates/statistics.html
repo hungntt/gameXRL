@@ -4,16 +4,30 @@
 <div class="container">
     <h1><b>Statistics</b></h1>
     <h2>Statistics of Pong game commented observations</h2>
-    {% for i in range(range_obs) %}
-        <div class="py-2">Commented observations/Total observations: {{ commented_obs[i] }}/{{ all_obs[i] }}</div>
+    {% for i in range(pong_range_obs) %}
+        <div class="py-2">Commented observations/Total observations: {{ pong_commented_obs[i] }}/{{ pong_all_obs[i] }}</div>
         <div class="progress">
             <div class="progress-bar progress-bar-striped progress-bar-animated
-                {% if commented_obs_percents[i]<=25 %} bg-danger {% endif %}
-                {% if commented_obs_percents[i] <= 75 %} bg-info {% endif %}"
-                 role="progressbar" aria-valuenow="{{ commented_obs[i] }}"
-                 aria-valuemin="0" aria-valuemax="{{ all_obs[i] }}"
-                 style="width: {{ commented_obs_percents[i] }}%">
-                {{ commented_obs_percents[i] }}% completed
+                {% if pong_commented_obs_percents[i]<=25 %} bg-danger {% endif %}
+                {% if pong_commented_obs_percents[i] <= 75 %} bg-info {% endif %}"
+                 role="progressbar" aria-valuenow="{{ pong_commented_obs[i] }}"
+                 aria-valuemin="0" aria-valuemax="{{ pong_all_obs[i] }}"
+                 style="width: {{ pong_commented_obs_percents[i] }}%">
+                {{ pong_commented_obs_percents[i] }}% completed
+            </div>
+        </div>
+    {% endfor %}
+    <h2 class="mt-5">Statistics of Minigrid game commented observations</h2>
+    {% for i in range(minigrid_range_obs) %}
+        <div class="py-2">Commented observations/Total observations: {{ minigrid_commented_obs[i] }}/{{ minigrid_all_obs[i] }}</div>
+        <div class="progress">
+            <div class="progress-bar progress-bar-striped progress-bar-animated
+                {% if minigrid_commented_obs_percents[i]<=25 %} bg-danger {% endif %}
+                {% if minigrid_commented_obs_percents[i] <= 75 %} bg-info {% endif %}"
+                 role="progressbar" aria-valuenow="{{ minigrid_commented_obs[i] }}"
+                 aria-valuemin="0" aria-valuemax="{{ minigrid_all_obs[i] }}"
+                 style="width: {{ minigrid_commented_obs_percents[i] }}%">
+                {{ minigrid_commented_obs_percents[i] }}% completed
             </div>
         </div>
     {% endfor %}
