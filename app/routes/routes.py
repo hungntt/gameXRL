@@ -1,4 +1,4 @@
-from flask import render_template, request, flash
+from flask import render_template, request, flash, redirect, url_for
 
 from app import app
 from app.routes.forms import CommentForm, CommentBatchForm
@@ -24,10 +24,8 @@ def show_game(gym_code, game_id):
     observations = None
     if gym_code == 'pong':
         observations = pong_api.select_observations_from_a_game(game_id)
-        # pong_api.close_connection()
     elif gym_code == 'minigrid':
         observations = minigrid_api.select_observations_from_a_game(game_id)
-        # minigrid_api.close_connection()
     return render_template('show_game.html', game_id=game_id, observations=observations, gym_code=gym_code)
 
 
@@ -36,11 +34,9 @@ def show_games_from_to_obs_id(gym_code, game_id, fobs_id, tobs_id):
     observations = None
     if gym_code == 'pong':
         observations = pong_api.select_observations_from_a_game_from_id_to_id(game_id, fobs_id, tobs_id)
-        # pong_api.close_connection()
     elif gym_code == 'minigrid':
         observations = minigrid_api.select_observations_from_a_game_from_id_to_id(game_id, fobs_id, tobs_id)
-        # minigrid_api.close_connection()
-    return render_template('show_game.html', game_id=game_id, observations=observations)
+    return render_template('show_game.html', gym_code=gym_code, game_id=game_id, observations=observations)
 
 
 @app.route('/<string:gym_code>/obs/<int:fobs_id>/<int:tobs_id>')
@@ -48,24 +44,20 @@ def show_from_to_obs_id(gym_code, fobs_id, tobs_id):
     observations = None
     if gym_code == 'pong':
         observations = pong_api.select_observations_from_id_to_id(fobs_id, tobs_id)
-        # pong_api.close_connection()
     elif gym_code == 'minigrid':
         observations = minigrid_api.select_observations_from_id_to_id(fobs_id, tobs_id)
-        # minigrid_api.close_connection()
-    return render_template('show_game.html', observations=observations)
+    return render_template('show_game.html', gym_code=gym_code, observations=observations)
 
 
 @app.route('/<string:gym_code>/obs/<int:obs_id>')
 def show_an_observation_from_an_obs_id(gym_code, obs_id):
     observation = None
     if gym_code == 'pong':
-        observations = pong_api.select_an_observation_from_an_obs_id(obs_id)
-        # pong_api.close_connection()
+        observation = pong_api.select_an_observation_from_an_obs_id(obs_id)
     elif gym_code == 'minigrid':
-        observations = minigrid_api.select_an_observation_from_an_obs_id(obs_id)
-        # minigrid_api.close_connection()
+        observation = minigrid_api.select_an_observation_from_an_obs_id(obs_id)
 
-    return render_template('show_game.html', observations=observation)
+    return render_template('show_game.html', gym_code=gym_code, observations=observation)
 
 
 @app.route('/<string:gym_code>/comment/<int:obs_id>', methods=['GET', 'POST'])
@@ -78,7 +70,7 @@ def comment_to_an_obs_id(gym_code, obs_id):
             pong_api.comment_to_an_obs_id(obs_id, form.data.get('comment'))
             flash('New comment created/updated successfully.')
             # pong_api.close_connection()
-            return render_template(show_an_observation_from_an_obs_id(gym_code=gym_code, obs_id=obs_id))
+            return redirect(url_for('show_an_observation_from_an_obs_id', gym_code=gym_code, obs_id=obs_id))
         # pong_api.close_connection()
     elif gym_code == 'minigrid':
         observation = minigrid_api.select_an_observation_from_an_obs_id(obs_id)
@@ -86,7 +78,7 @@ def comment_to_an_obs_id(gym_code, obs_id):
             minigrid_api.comment_to_an_obs_id(obs_id, form.data.get('comment'))
             flash('New comment created/updated successfully.')
             # minigrid_api.close_connection()
-            return render_template(show_an_observation_from_an_obs_id(gym_code=gym_code, obs_id=obs_id))
+            return redirect(url_for('show_an_observation_from_an_obs_id', gym_code=gym_code, obs_id=obs_id))
         # minigrid_api.close_connection()
 
     return render_template('comment.html', form=form, gym_code=gym_code, observations=observation)
@@ -105,7 +97,8 @@ def comment_many_obs(gym_code):
                     return render_template(comment_many_obs(gym_code=gym_code))
                 pong_api.comment_to_many_obs_id(start_obs_id, end_obs_id, form.data.get('comment'))
                 flash('New comment batches created/updated successfully.')
-                return render_template(show_from_to_obs_id(gym_code=gym_code, fobs_id=start_obs_id, tobs_id=end_obs_id))
+                return redirect(url_for('show_from_to_obs_id', gym_code=gym_code,
+                                        fobs_id=start_obs_id, tobs_id=end_obs_id))
             except Exception as e:
                 flash(e, 'error')
             # pong_api.close_connection()
@@ -116,10 +109,11 @@ def comment_many_obs(gym_code):
                 end_obs_id = form.data.get('end_obs_id')
                 if int(start_obs_id) >= int(end_obs_id):
                     flash(u'Start obs id must be smaller than End obs id', 'error')
-                    return render_template(comment_many_obs(gym_code=gym_code))
+                    return redirect(url_for('comment_many_obs', gym_code=gym_code))
                 minigrid_api.comment_to_many_obs_id(start_obs_id, end_obs_id, form.data.get('comment'))
                 flash('New comment batches created/updated successfully.')
-                return render_template(show_from_to_obs_id(gym_code=gym_code, fobs_id=start_obs_id, tobs_id=end_obs_id))
+                return redirect(url_for('show_from_to_obs_id', gym_code=gym_code,
+                                        fobs_id=start_obs_id, tobs_id=end_obs_id))
             except Exception as e:
                 flash(e, 'error')
             # minigrid_api.close_connection()

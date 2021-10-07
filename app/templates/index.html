@@ -6,7 +6,7 @@
     <h2>Choose a game from pre-rendered Pong environment</h2>
     <div class="text-center">
         {% for game_id in pong_game_ids %}
-            <a class="btn btn-primary btn-lg" href={{ url_for('show_game', gym_code='pong', game_id=game_id[0]) }}>
+            <a class="btn btn-primary btn-lg mb-2" href={{ url_for('show_game', gym_code='pong', game_id=game_id[0]) }}>
                 Game {{ game_id[0] }}
             </a>
         {% endfor %}
@@ -14,7 +14,7 @@
     <h2 class="mt-5">Choose a game from pre-rendered MiniGrid environment</h2>
     <div class="text-center">
         {% for game_id in minigrid_game_ids %}
-            <a class="btn btn-danger btn-lg" href={{ url_for('show_game', gym_code='minigrid', game_id=game_id[0]) }}>
+            <a class="btn btn-danger btn-lg mb-2" href={{ url_for('show_game', gym_code='minigrid', game_id=game_id[0]) }}>
                 Game {{ game_id[0] }}
             </a>
         {% endfor %}
