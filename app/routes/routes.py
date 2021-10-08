@@ -31,11 +31,11 @@ def show_game(gym_code, game_id):
 
 
 @app.route('/pong/game/<int:game_id>/turn/', methods=['GET', 'POST'])
-def show_pong_turns(game_id):
+def show_pong_turns(game_id, page=None):
     obs_id_end_turn_list = pong_api.get_obs_id_by_turns(game_id=game_id)
     obs_turn_count = len(obs_id_end_turn_list)
     per_page = 1
-    page = request.args.get(get_page_parameter(), type=int, default=1)
+    page = request.args.get(get_page_parameter(), type=int, default=1) if page is None else page
     if page == 1:
         obs_by_turn = pong_api. \
             select_observations_from_a_game_from_id_to_id(game_id=game_id, fobs_id=1,
@@ -56,8 +56,7 @@ def show_pong_turns(game_id):
                 return render_template(comment_many_obs(gym_code='pong'))
             pong_api.comment_to_many_obs_id(start_obs_id, end_obs_id, form.data.get('comment'))
             flash('New comment batches created/updated successfully.')
-            return redirect(url_for('show_from_to_obs_id', gym_code='pong',
-                                    fobs_id=start_obs_id, tobs_id=end_obs_id))
+            return redirect(url_for('show_pong_turns', game_id=game_id, page=page))
         except Exception as e:
             flash(e, 'error')
     return render_template('show_game_pagination.html', gym_code='pong',
