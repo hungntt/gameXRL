@@ -37,10 +37,17 @@ def show_pong_turns(game_id, page=None):
     per_page = 1
     page = request.args.get(get_page_parameter(), type=int, default=1) if page is None else page
     if page == 1:
+        # First turn
         obs_by_turn = pong_api. \
             select_observations_from_a_game_from_id_to_id(game_id=game_id, fobs_id=1,
                                                           tobs_id=obs_id_end_turn_list[page - 1][0] - 1)
+    elif page == obs_turn_count:
+        # Final turn
+        obs_by_turn = pong_api. \
+            select_observations_from_a_game_from_id_to_id(game_id=game_id, fobs_id=obs_id_end_turn_list[page - 2][0],
+                                                          tobs_id=obs_id_end_turn_list[page - 1][0])
     else:
+        # Other turns
         obs_by_turn = pong_api. \
             select_observations_from_a_game_from_id_to_id(game_id=game_id,
                                                           fobs_id=obs_id_end_turn_list[page - 2][0],

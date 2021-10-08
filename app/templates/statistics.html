@@ -9,7 +9,8 @@
         <div class="progress">
             <div class="progress-bar progress-bar-striped progress-bar-animated
                 {% if pong_commented_obs_percents[i]<=25 %} bg-danger {% endif %}
-                {% if pong_commented_obs_percents[i] <= 75 %} bg-info {% endif %}"
+                {% if pong_commented_obs_percents[i]<=75 %} bg-info {% endif %}
+                {% if pong_commented_obs_percents[i]==100 %} bg-success {% endif %}"
                  role="progressbar" aria-valuenow="{{ pong_commented_obs[i] }}"
                  aria-valuemin="0" aria-valuemax="{{ pong_all_obs[i] }}"
                  style="width: {{ pong_commented_obs_percents[i] }}%">
@@ -23,7 +24,8 @@
         <div class="progress">
             <div class="progress-bar progress-bar-striped progress-bar-animated
                 {% if minigrid_commented_obs_percents[i]<=25 %} bg-danger {% endif %}
-                {% if minigrid_commented_obs_percents[i] <= 75 %} bg-info {% endif %}"
+                {% if minigrid_commented_obs_percents[i]<=75 %} bg-info {% endif %}
+                {% if minigrid_commented_obs_percents[i]==100 %} bg-success {% endif %}"
                  role="progressbar" aria-valuenow="{{ minigrid_commented_obs[i] }}"
                  aria-valuemin="0" aria-valuemax="{{ minigrid_all_obs[i] }}"
                  style="width: {{ minigrid_commented_obs_percents[i] }}%">
