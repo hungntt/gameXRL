@@ -53,7 +53,7 @@ def show_pong_turns(game_id, page=None):
             end_obs_id = form.data.get('end_obs_id')
             if int(start_obs_id) >= int(end_obs_id):
                 flash(u'Start obs id must be smaller than End obs id', 'error')
-                return render_template(comment_many_obs(gym_code='pong'))
+                return redirect(url_for('show_pong_turns', game_id=game_id, page=page))
             pong_api.comment_to_many_obs_id(start_obs_id, end_obs_id, form.data.get('comment'))
             flash('New comment batches created/updated successfully.')
             return redirect(url_for('show_pong_turns', game_id=game_id, page=page))
