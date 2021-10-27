@@ -18,7 +18,7 @@ def test(args, T, dqn, val_mem, metrics, results_dir, evaluate=False):
     T_rewards, T_Qs = [], []
 
     # Test performance over several episodes
-    api = API()
+    api = API(cnx_type='remote', db='pong')
     done = True
     for _ in range(args.evaluation_episodes):
         while True:
@@ -45,7 +45,7 @@ def test(args, T, dqn, val_mem, metrics, results_dir, evaluate=False):
             if done:
                 T_rewards.append(reward_sum)
                 break
-    env.close()
+    # env.close()
     api.close_connection()
 
     # Test Q-values over validation memory

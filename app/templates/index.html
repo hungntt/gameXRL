@@ -12,9 +12,11 @@
         {% endfor %}
     </div>
     <h2 class="mt-5">Choose a game from pre-rendered MiniGrid environment</h2>
+    <h2 class="mt-5">Pong is under maintenance</h2>
     <div class="text-center">
         {% for game_id in minigrid_game_ids %}
-            <a class="btn btn-danger btn-lg mb-2" href={{ url_for('show_game', gym_code='minigrid', game_id=game_id[0]) }}>
+            <a class="btn btn-danger btn-lg mb-2"
+               href={{ url_for('show_game', gym_code='minigrid', game_id=game_id[0]) }}>
                 Game {{ game_id[0] }}
             </a>
         {% endfor %}
@@ -34,8 +36,10 @@
                 <div class="card-body">
                     <h5 class="card-title">Batch Commentary</h5>
                     <p class="card-text">Fast comment for multiple observations.</p>
-                    <a href="{{ url_for('comment_many_obs', gym_code='pong') }}" class="btn btn-primary btn-lg">Pong >></a>
-                    <a href="{{ url_for('comment_many_obs', gym_code='minigrid') }}" class="btn btn-danger btn-lg">Minigrid >></a>
+                    <a href="{{ url_for('comment_many_obs', gym_code='pong') }}" class="btn btn-primary btn-lg">Pong
+                        >></a>
+                    <a href="{{ url_for('comment_many_obs', gym_code='minigrid') }}" class="btn btn-danger btn-lg">Minigrid
+                        >></a>
                 </div>
             </div>
         </div>

@@ -14,6 +14,11 @@ class CommentForm(Form):
     comment = TextAreaField('Comment')
 
 
+class CommentFormWithID(Form):
+    obs_id = StringField('Observation ID')
+    comment = TextAreaField('Comment')
+
+
 class CommentBatchForm(Form):
     start_obs_id = StringField('Start observation')
     end_obs_id = StringField('End observation')

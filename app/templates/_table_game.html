@@ -8,7 +8,7 @@
         <th>Action Meaning</th>
         <th>Reward</th>
         <th>Done</th>
-        {% if form is defined %}
+        {% if comment_batch_form is defined %}
             <th>Set ID</th>
         {% endif %}
         {#        <th>Commentary Batch</th>#}
@@ -22,11 +22,17 @@
                 <td><img src="{{ observation[4] }}" alt=""></td>
                 <td>
                     {% if observation[8] == 'None' %}
-                        <a class="btn btn-primary mb-2"
-                           href={{ url_for('comment_to_an_obs_id', gym_code=gym_code, obs_id=observation[0]) }}>Comment</a>
+                        <button type="button" class="btn btn-primary mb-2" value="{{ observation[0] }}"
+                                id="set_id" data-toggle="modal"
+                                data-target="#commentModal"
+                                onclick="set_single_obs_id(this)">Comment
+                        </button>
                     {% else %}
-                        <a class="btn btn-success mb-2"
-                           href={{ url_for('comment_to_an_obs_id', gym_code=gym_code, obs_id=observation[0]) }}>Update</a>
+                        <button type="button" class="btn btn-success mb-2" value="{{ observation[0] }}"
+                                id="set_id" data-toggle="modal"
+                                data-target="#commentModal"
+                                onclick="set_single_obs_id(this)">Update
+                        </button>
                         <br>
                         {{ observation[8] }}
                         </td>
@@ -42,7 +48,7 @@
                 </td>
                 <td>{{ observation[7] }}</td>
                 <td>{{ 'Done' if observation[6] == 1 else 'Not Done' }}</td>
-                {% if form is defined %}
+                {% if comment_batch_form is defined %}
                     <td>
                         <button type="button" class="btn btn-primary mb-2" value="{{ observation[0] }}"
                                 id="set_start" data-toggle="modal"
@@ -103,6 +109,12 @@
                 $('#start').val($this.value);
             } else if ($this.id === "set_end") {
                 $('#end').val($this.value);
+            }
+        }
+
+        function set_single_obs_id($this) {
+            if ($this.id === "set_id") {
+                $('#obs_id').val($this.value);
             }
         }
     </script>

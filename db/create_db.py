@@ -6,7 +6,7 @@ from mysql.connector import errorcode
 from db.api import API
 from db.connect_db import connect_db
 
-DB_NAME = 'xrl'
+DB_NAME = 'pong'
 DB_TABLES = {'gyms': (
     "CREATE TABLE `gyms` ("
     " `gym_id` int(11) NOT NULL AUTO_INCREMENT,"
@@ -35,6 +35,7 @@ DB_TABLES = {'gyms': (
     " `comment` longtext,"
     " `comment_batches_id` int(11),"
     " `created_at` datetime NOT NULL,"
+    " `image_array` longtext, "
     " PRIMARY KEY (`obs_id`), "
     " CONSTRAINT `observations_idfk1` FOREIGN KEY (`gym_id`) REFERENCES `gyms` (`gym_id`), "
     " CONSTRAINT `observations_idfk2` FOREIGN KEY (`game_id`) REFERENCES `games` (`game_id`)"
@@ -93,21 +94,16 @@ def create_tables(cursor):
             print("OK")
 
 
-def create_pre_data(api):
-    api.create_gym(gym_code='pong')
-
-
 def main():
     mode = 'server'
     if mode == 'server':
-        server, cnx = connect_db('server')
+        server, cnx = connect_db('remote')
         cursor = cnx.cursor()
 
         create_database(cursor, cnx)
         create_tables(cursor)
 
-        api = API(server, cnx, cursor)
-        create_pre_data(api)
+        api = API(cnx_type='remote')
 
         cursor.close()
         cnx.close()

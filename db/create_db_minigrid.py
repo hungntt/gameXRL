@@ -101,13 +101,13 @@ def create_pre_data(api):
 def main():
     mode = 'remote'
     if mode == 'remote':
-        server, cnx = connect_db('remote', 'minigrid')
+        server, cnx = connect_db('remote')
         cursor = cnx.cursor()
 
         create_database(cursor, cnx)
         create_tables(cursor)
 
-        # api = API(server, cnx, cursor)
+        api = API(cnx_type='remote')
         # create_pre_data(api)
 
         cursor.close()

@@ -70,6 +70,14 @@ parser.add_argument('--checkpoint-interval', default=0,
 parser.add_argument('--memory', help='Path to save/load the memory from')
 parser.add_argument('--disable-bzip-memory', action='store_true',
                     help='Don\'t zip the memory file. Not recommended (zipping is a bit slower and much, much smaller)')
+# parser.add_argument('--app_type', help='Flask app run type: remote (to connect from your own device to IRender)'
+#                                        'or server (only for running web on IRender) (default: server)',
+#                     type=str, default='server')
+# parser.add_argument('--cnx_type', help='Database: local (database on your own device) '
+#                                        'or server (only for running web on IRender) '
+#                                        'or remote (to connect from your own device to IRender)'
+#                                        '(default: server)',
+#                     type=str, default='server')
 
 # Setup
 args = parser.parse_args()
