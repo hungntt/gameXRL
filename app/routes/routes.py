@@ -78,11 +78,11 @@ def show_pong_turns(game_id, page=None):
     comment_form = CommentFormWithID(request.form)
     comment_batch_form = CommentBatchForm(request.form)
     if request.method == 'POST':
-        if comment_form.comment.data:
+        if comment_form.comment_submit.data:  # Check button submitted from comment form
             pong_api.comment_to_an_obs_id(comment_form.data.get('obs_id'), comment_form.data.get('comment'))
             flash('New comment created/updated successfully.')
             return redirect(url_for('show_pong_turns', game_id=game_id, page=page))
-        elif comment_batch_form.comment.data:
+        elif comment_batch_form.batch_submit.data:  # Check button submitted from batch comment from
             try:
                 start_obs_id = comment_batch_form.data.get('start_obs_id')
                 end_obs_id = comment_batch_form.data.get('end_obs_id')

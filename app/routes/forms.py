@@ -1,4 +1,4 @@
-from wtforms import widgets, Form, StringField, TextAreaField, SelectMultipleField
+from wtforms import widgets, Form, StringField, TextAreaField, SelectMultipleField, SubmitField
 
 
 class MultiCheckboxField(SelectMultipleField):
@@ -17,9 +17,11 @@ class CommentForm(Form):
 class CommentFormWithID(Form):
     obs_id = StringField('Observation ID')
     comment = TextAreaField('Comment')
+    comment_submit = SubmitField('Submit')
 
 
 class CommentBatchForm(Form):
     start_obs_id = StringField('Start observation')
     end_obs_id = StringField('End observation')
     comment = TextAreaField('Comment')
+    batch_submit = SubmitField('Submit')

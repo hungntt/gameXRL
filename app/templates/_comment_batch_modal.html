@@ -15,15 +15,15 @@
                 <form method=post>
                     <div class="form-row">
                         <div class="form-group col-md-6">
-                            {{ render_field(comment_batch_form.start_obs_id, id="start") }}
+                            {{ render_field(comment_batch_form.start_obs_id, id="start", onfocus="this.blur()", readonly="readonly") }}
                         </div>
                         <div class="form-group col-md-6">
-                            {{ render_field(comment_batch_form.end_obs_id, id="end") }}
+                            {{ render_field(comment_batch_form.end_obs_id, id="end", onfocus="this.blur()", readonly="readonly") }}
                         </div>
                     </div>
                     <dl>{{ render_field(comment_batch_form.comment) }}</dl>
                     <p>
-                        <button class="btn btn-primary" type=submit value=submit>Submit</button>
+                        {{ comment_batch_form.batch_submit(class="btn btn-primary") }}
                 </form>
             </div>
         </div>

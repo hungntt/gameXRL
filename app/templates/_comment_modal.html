@@ -16,7 +16,7 @@
                     <dl>{{ render_field(comment_form.obs_id, id="obs_id", onfocus="this.blur()", readonly="readonly") }}</dl>
                     <dl>{{ render_field(comment_form.comment) }}</dl>
                     <p>
-                        <button class="btn btn-primary" type=submit value=submit>Submit</button>
+                        {{ comment_form.comment_submit(class="btn btn-primary") }}
                 </form>
             </div>
         </div>
