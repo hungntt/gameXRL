@@ -14,9 +14,12 @@
             </ul>
         {% endif %}
     {% endwith %}
-    {% if form is defined %}
-        {% include '_comment_batch_modal.html' %}
-    {% endif %}
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-info stick-bot-right" data-toggle="modal" data-target="#exampleModal">
+        Batch Comment
+    </button>
+    {% include '_comment_modal.html' %}
+    {% include '_comment_batch_modal.html' %}
     {% include '_table_game.html' %}
 </div>
 </body>

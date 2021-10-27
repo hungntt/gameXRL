@@ -28,27 +28,37 @@ def show_game(gym_code, game_id):
     if gym_code == 'pong':
         return redirect(url_for("show_pong_turns", game_id=game_id))
     elif gym_code == 'minigrid':
-        observations = minigrid_api.select_observations_from_a_game(game_id)
+        return redirect(url_for("show_minigrid_games", game_id=game_id))
     return render_template('show_game.html', game_id=game_id, observations=observations, gym_code=gym_code)
 
 
-# def show_minigrid_games(game_id):
-#     pong_api, minigrid_api = init_API()
-#     form = CommentBatchForm(request.form)
-#     if request.method == 'POST':
-#         try:
-#             start_obs_id = form.data.get('start_obs_id')
-#             end_obs_id = form.data.get('end_obs_id')
-#             if int(start_obs_id) >= int(end_obs_id):
-#                 flash(u'Start obs id must be smaller than End obs id', 'error')
-#                 return redirect(url_for('show_minigrid_games', game_id=game_id))
-#             pong_api.comment_to_many_obs_id(start_obs_id, end_obs_id, form.data.get('comment'))
-#             flash('New comment batches created/updated successfully.')
-#             return redirect(url_for('show_minigrid_games', game_id=game_id))
-#         except Exception as e:
-#             flash(e, 'error')
-#     return render_template('show_game_pagination.html', gym_code='pong',
-#                            game_id=game_id, observations=obs_by_turn, pagination=pagination, form=form)
+@app.route('/pong/game/<int:game_id>', methods=['GET', 'POST'])
+def show_minigrid_games(game_id):
+    pong_api, minigrid_api = init_API()
+    observations = minigrid_api.select_observations_from_a_game(game_id)
+    comment_form = CommentFormWithID(request.form)
+    comment_batch_form = CommentBatchForm(request.form)
+    if request.method == 'POST':
+        if comment_form.comment_submit.data:  # Check button submitted from comment form
+            minigrid_api.comment_to_an_obs_id(comment_form.data.get('obs_id'), comment_form.data.get('comment'))
+            flash('New comment created/updated successfully.')
+            return redirect(url_for('show_minigrid_games', game_id=game_id))
+        elif comment_batch_form.batch_submit.data:  # Check button submitted from batch comment from
+            try:
+                start_obs_id = comment_batch_form.data.get('start_obs_id')
+                end_obs_id = comment_batch_form.data.get('end_obs_id')
+                if int(start_obs_id) >= int(end_obs_id):
+                    flash(u'Start obs id must be smaller than End obs id', 'error')
+                    return redirect(url_for('show_minigrid_games', game_id=game_id))
+                minigrid_api.comment_to_many_obs_id(start_obs_id, end_obs_id, comment_batch_form.data.get('comment'))
+                flash('New comment batches created/updated successfully.')
+                return redirect(url_for('show_minigrid_games', game_id=game_id))
+            except Exception as e:
+                flash(e, 'error')
+    return render_template('show_game.html', gym_code='minigrid',
+                           game_id=game_id, observations=observations,
+                           comment_batch_form=comment_batch_form,
+                           comment_form=comment_form)
 
 
 @app.route('/pong/game/<int:game_id>/turn/', methods=['GET', 'POST'])

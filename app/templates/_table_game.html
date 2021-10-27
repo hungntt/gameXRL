@@ -73,11 +73,17 @@
                 <td>
                     {# Comment #}
                     {% if observation[9] == 'None' %}
-                        <a class="btn btn-primary mb-2"
-                           href={{ url_for('comment_to_an_obs_id', gym_code=gym_code, obs_id=observation[0]) }}>Comment</a>
+                        <button type="button" class="btn btn-primary mb-2" value="{{ observation[0] }}"
+                                id="set_id" data-toggle="modal"
+                                data-target="#commentModal"
+                                onclick="set_single_obs_id(this)">Comment
+                        </button>
                     {% else %}
-                        <a class="btn btn-success mb-2"
-                           href={{ url_for('comment_to_an_obs_id', gym_code=gym_code, obs_id=observation[0]) }}>Update</a>
+                        <button type="button" class="btn btn-success mb-2" value="{{ observation[0] }}"
+                                id="set_id" data-toggle="modal"
+                                data-target="#commentModal"
+                                onclick="set_single_obs_id(this)">Update
+                        </button>
                         <br>
                         {{ observation[9] }}
                         </td>
@@ -86,16 +92,17 @@
                 <td>{{ observation[6] }}</td>
                 <td>{{ observation[8] }}</td>
                 <td>{{ 'Done' if observation[7] == 1 else 'Not Done' }}</td>
-                {% if form is defined %}
+                {% if comment_batch_form is defined %}
                     <td>
-                        <button type="button" class="btn btn-primary mb-2" data-toggle="modal"
+                        <button type="button" class="btn btn-primary mb-2" value="{{ observation[0] }}"
+                                id="set_start" data-toggle="modal"
                                 data-target="#exampleModal"
-                                value="{{ observation[0] }}" id="set_start"
                                 onclick="set_obs_id(this)">Start
                         </button>
                         <button type="button" class="btn btn-secondary mb-2" value="{{ observation[0] }}"
-                                data-toggle="modal" data-target="#exampleModal"
-                                id="set_end" onclick="set_obs_id(this)">End
+                                id="set_end" data-toggle="modal"
+                                data-target="#exampleModal"
+                                onclick="set_obs_id(this)">End
                         </button>
                     </td>
                 {% endif %}
