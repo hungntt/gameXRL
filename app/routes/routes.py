@@ -32,7 +32,7 @@ def show_game(gym_code, game_id):
     return render_template('show_game.html', game_id=game_id, observations=observations, gym_code=gym_code)
 
 
-@app.route('/pong/game/<int:game_id>', methods=['GET', 'POST'])
+@app.route('/minigrid/game/<int:game_id>', methods=['GET', 'POST'])
 def show_minigrid_games(game_id):
     pong_api, minigrid_api = init_API()
     observations = minigrid_api.select_observations_from_a_game(game_id)
