@@ -206,4 +206,4 @@ else:
 
         state = next_state
 
-env.close()
+# env.close()
