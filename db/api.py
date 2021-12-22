@@ -198,6 +198,17 @@ class API:
             self.cursor.execute(comment_query, comment_value)
             print("Insert comment to obs_id %s", i, input_comment)
         self.cnx.commit()
+
+    def comment_batch(self, start_obs_id, end_obs_id, input_comment):
+        """
+        Comment to a batch of observations
+        """
+        for i in range(int(start_obs_id), int(end_obs_id) + 1):
+            comment_query = "UPDATE observations SET comment_for_batches = %s WHERE obs_id = %s"
+            comment_value = (input_comment, i)
+            self.cursor.execute(comment_query, comment_value)
+            print("Insert comment to obs_id %s", i, input_comment)
+        self.cnx.commit()
         self.create_comment_batch(start_obs_id, end_obs_id, input_comment)
 
     def get_all_games_id_of_a_gym(self, gym_id):

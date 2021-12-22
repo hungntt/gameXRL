@@ -1,4 +1,36 @@
-<!-- Modal -->
+<!-- Modal for multiple single comment -->
+<div class="modal fade bd-example-modal-lg" id="multipleSingleModal" tabindex="-1" role="dialog"
+     aria-labelledby="multipleSingleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="multipleSingleModalLabel">Multiple Single Comment</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                {% from "_formhelpers.html" import render_field %}
+                <form method=post>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            {{ render_field(comment_multiple_singles_form.start_obs_id, id="start", onfocus="this.blur()", readonly="readonly") }}
+                        </div>
+                        <div class="form-group col-md-6">
+                            {{ render_field(comment_multiple_singles_form.end_obs_id, id="end", onfocus="this.blur()", readonly="readonly") }}
+                        </div>
+                    </div>
+                    <dl>{{ render_field(comment_batch_form.comment) }}</dl>
+                    <p>
+                        {{ comment_multiple_singles_form.multiple_singles_submit(class="btn btn-primary") }}
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for comment batch-->
 <div class="modal fade bd-example-modal-lg" id="exampleModal" tabindex="-1" role="dialog"
      aria-labelledby="exampleModalLabel"
      aria-hidden="true">
@@ -15,10 +47,10 @@
                 <form method=post>
                     <div class="form-row">
                         <div class="form-group col-md-6">
-                            {{ render_field(comment_batch_form.start_obs_id, id="start", onfocus="this.blur()", readonly="readonly") }}
+                            {{ render_field(comment_batch_form.start_obs_id, id="batch_start", onfocus="this.blur()", readonly="readonly") }}
                         </div>
                         <div class="form-group col-md-6">
-                            {{ render_field(comment_batch_form.end_obs_id, id="end", onfocus="this.blur()", readonly="readonly") }}
+                            {{ render_field(comment_batch_form.end_obs_id, id="batch_end", onfocus="this.blur()", readonly="readonly") }}
                         </div>
                     </div>
                     <dl>{{ render_field(comment_batch_form.comment) }}</dl>

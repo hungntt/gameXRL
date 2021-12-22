@@ -4,12 +4,16 @@
         <th>State ID</th>
         <th>State</th>
         <th>Commentary</th>
+        <th>Commentary Batch</th>
         <th>Action</th>
         <th>Action Meaning</th>
         <th>Reward</th>
         <th>Done</th>
-        {% if comment_batch_form is defined %}
+        {% if comment_multiple_singles_form is defined %}
             <th>Set ID</th>
+        {% endif %}
+        {% if comment_batch_form is defined %}
+            <th>Set ID Comment Batch</th>
         {% endif %}
         {#        <th>Commentary Batch</th>#}
     </tr>
@@ -35,8 +39,10 @@
                         </button>
                         <br>
                         {{ observation[8] }}
-                        </td>
                     {% endif %}
+                </td>
+                <td>{{ observation[12] }}</td>
+
                 <td>{{ observation[5] }}</td>
                 <td>
                     {% if observation[5] == 0 %}NOOP{% endif %}
@@ -48,20 +54,35 @@
                 </td>
                 <td>{{ observation[7] }}</td>
                 <td>{{ 'Done' if observation[6] == 1 else 'Not Done' }}</td>
-                {% if comment_batch_form is defined %}
+                {% if comment_multiple_singles_form is defined %}
                     <td>
                         <button type="button" class="btn btn-primary mb-2" value="{{ observation[0] }}"
                                 id="set_start" data-toggle="modal"
-                                data-target="#exampleModal"
+                                data-target="#multipleSingleModal"
                                 onclick="set_obs_id(this)">Start
                         </button>
                         <button type="button" class="btn btn-secondary mb-2" value="{{ observation[0] }}"
                                 id="set_end" data-toggle="modal"
-                                data-target="#exampleModal"
+                                data-target="#multipleSingleModal"
                                 onclick="set_obs_id(this)">End
                         </button>
                     </td>
                 {% endif %}
+                {% if comment_batch_form is defined %}
+                    <td>
+                        <button type="button" class="btn btn-primary mb-2" value="{{ observation[0] }}"
+                                id="set_batch_start" data-toggle="modal"
+                                data-target="#exampleModal"
+                                onclick="set_obs_batch_id(this)">Start
+                        </button>
+                        <button type="button" class="btn btn-secondary mb-2" value="{{ observation[0] }}"
+                                id="set_batch_end" data-toggle="modal"
+                                data-target="#exampleModal"
+                                onclick="set_obs_batch_id(this)">End
+                        </button>
+                    </td>
+                {% endif %}
+
                 {#                <td>{{ 'None' if observation[9] == -1 else observation[9] }}</td>#}
             </tr>
         {% endif %}
@@ -86,23 +107,38 @@
                         </button>
                         <br>
                         {{ observation[9] }}
-                        </td>
                     {% endif %}
+                </td>
+                <td>{{ observation[12] }}</td>
                 <td>{{ observation[5] }}</td>
                 <td>{{ observation[6] }}</td>
                 <td>{{ observation[8] }}</td>
                 <td>{{ 'Done' if observation[7] == 1 else 'Not Done' }}</td>
-                {% if comment_batch_form is defined %}
+                {% if comment_multiple_singles_form is defined %}
                     <td>
                         <button type="button" class="btn btn-primary mb-2" value="{{ observation[0] }}"
                                 id="set_start" data-toggle="modal"
-                                data-target="#exampleModal"
+                                data-target="#multipleSingleModal"
                                 onclick="set_obs_id(this)">Start
                         </button>
                         <button type="button" class="btn btn-secondary mb-2" value="{{ observation[0] }}"
                                 id="set_end" data-toggle="modal"
-                                data-target="#exampleModal"
+                                data-target="#multipleSingleModal"
                                 onclick="set_obs_id(this)">End
+                        </button>
+                    </td>
+                {% endif %}
+                {% if comment_batch_form is defined %}
+                    <td>
+                        <button type="button" class="btn btn-primary mb-2" value="{{ observation[0] }}"
+                                id="set_batch_start" data-toggle="modal"
+                                data-target="#exampleModal"
+                                onclick="set_obs_batch_id(this)">Start
+                        </button>
+                        <button type="button" class="btn btn-secondary mb-2" value="{{ observation[0] }}"
+                                id="set_batch_end" data-toggle="modal"
+                                data-target="#exampleModal"
+                                onclick="set_obs_batch_id(this)">End
                         </button>
                     </td>
                 {% endif %}
@@ -116,6 +152,14 @@
                 $('#start').val($this.value);
             } else if ($this.id === "set_end") {
                 $('#end').val($this.value);
+            }
+        }
+
+        function set_obs_batch_id($this) {
+            if ($this.id === "set_batch_start") {
+                $('#batch_start').val($this.value);
+            } else if ($this.id === "set_batch_end") {
+                $('#batch_end').val($this.value);
             }
         }
 

@@ -33,6 +33,7 @@ DB_TABLES = {'gyms': (
     " `done` boolean NOT NULL,"
     " `reward` float(11) NOT NULL,"
     " `comment` longtext,"
+    " `comment_for_batches` longtext,"
     " `comment_batches_id` int(11),"
     " `created_at` datetime NOT NULL,"
     " `image_array` longtext, "

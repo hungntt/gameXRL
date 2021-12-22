@@ -20,7 +20,14 @@ class CommentFormWithID(Form):
     comment_submit = SubmitField('Submit')
 
 
-class CommentBatchForm(Form):
+class CommentMultipleSingles(Form):
+    start_obs_id = StringField('Start observation')
+    end_obs_id = StringField('End observation')
+    comment = TextAreaField('Comment')
+    multiple_singles_submit = SubmitField('Submit')
+
+
+class CommentBatch(Form):
     start_obs_id = StringField('Start observation')
     end_obs_id = StringField('End observation')
     comment = TextAreaField('Comment')
