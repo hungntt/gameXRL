@@ -1,5 +1,5 @@
-# gameXRL
-Repo for white paper XRL
+# Reinforcement Learning Commentary Labelling Platform
+This repository contains the code of a website to label the commentary for Reinforcement Learning decisions in Pong and Maze environment.
 ## Web Interface
 ### Pre-install dependencies
 - Install requirements
